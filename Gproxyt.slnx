@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gproxyt.Core/Gproxyt.Core.csproj" />
+    <Project Path="src/Gproxyt/Gproxyt.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Gproxyt.Core.Tests/Gproxyt.Core.Tests.csproj" />
+  </Folder>
+</Solution>
