@@ -11,7 +11,7 @@ internal sealed class ApplicationRuntime
 
     public ApplicationRuntime()
     {
-        installationLocator = new ChatGptInstallationLocator(new PowerShellPackageLocationSource());
+        installationLocator = new ChatGptInstallationLocator(new WindowsPackageRegistrationSource());
         launcher = new GproxytLauncher(installationLocator, new WindowsProcessManager());
         Diagnostics = new EnvironmentDiagnostics(installationLocator);
     }

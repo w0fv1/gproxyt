@@ -5,12 +5,13 @@ param(
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repositoryRoot = Resolve-Path (Join-Path $projectRoot "..\..")
-$localDotnet = Join-Path $repositoryRoot ".tmp\dotnet\dotnet.exe"
-$dotnet = if (Test-Path -LiteralPath $localDotnet) {
+Import-Module (Join-Path $projectRoot "GproxytWorkspace.psm1") -Force
+$repoRoot = Find-NfircoSuperprojectRoot -ProjectRoot $projectRoot
+$localDotnet = if ($null -ne $repoRoot) { Join-Path $repoRoot ".tmp\dotnet\dotnet.exe" } else { $null }
+$dotnet = if ($null -ne $localDotnet -and (Test-Path -LiteralPath $localDotnet -PathType Leaf)) {
     $localDotnet
 } else {
-    (Get-Command dotnet -ErrorAction Stop).Source
+    (Get-Command dotnet -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
 }
 $publishDirectory = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     Join-Path $projectRoot "dist"

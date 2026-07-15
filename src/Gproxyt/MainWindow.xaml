@@ -15,6 +15,25 @@
                  WindowCornerPreference="Round"
                  WindowBackdropType="Mica"
                  Background="{DynamicResource ApplicationBackgroundBrush}">
+    <ui:FluentWindow.Resources>
+        <Style x:Key="LaunchButtonFocusVisualStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid Margin="-3">
+                            <Ellipse Stroke="{DynamicResource FocusStrokeColorOuterBrush}"
+                                     StrokeThickness="2"
+                                     SnapsToDevicePixels="True" />
+                            <Ellipse Margin="2"
+                                     Stroke="{DynamicResource FocusStrokeColorInnerBrush}"
+                                     StrokeThickness="1"
+                                     SnapsToDevicePixels="True" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ui:FluentWindow.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="46" />
@@ -86,6 +105,7 @@
                     Background="{DynamicResource AccentFillColorDefaultBrush}"
                     BorderThickness="0"
                     Cursor="Hand"
+                    FocusVisualStyle="{StaticResource LaunchButtonFocusVisualStyle}"
                     AutomationProperties.Name="启动 ChatGPT"
                     Opacity="0"
                     RenderTransformOrigin="0.5,0.5"
@@ -217,6 +237,11 @@
                                      Visibility="Collapsed" />
                 </Grid>
             </Button>
+            <TextBlock Margin="0,16,0,0"
+                       HorizontalAlignment="Center"
+                       Text="单独使用代理打开你的 ChatGPT。"
+                       FontSize="13"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
         </StackPanel>
     </Grid>
 </ui:FluentWindow>

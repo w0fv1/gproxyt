@@ -8,6 +8,11 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs eventArgs)
     {
         base.OnStartup(eventArgs);
+        if (eventArgs.Args.Contains("--package-debugger", StringComparer.OrdinalIgnoreCase))
+        {
+            Shutdown();
+            return;
+        }
         ApplicationThemeManager.ApplySystemTheme();
         var runtime = new ApplicationRuntime();
         try

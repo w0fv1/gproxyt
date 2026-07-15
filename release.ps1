@@ -6,7 +6,11 @@ param(
 
 $ErrorActionPreference = "Stop"
 $scriptRoot = $PSScriptRoot
-$repoRoot = Split-Path -Path (Split-Path -Path $scriptRoot -Parent) -Parent
+Import-Module (Join-Path $scriptRoot "GproxytWorkspace.psm1") -Force
+$repoRoot = Find-NfircoSuperprojectRoot -ProjectRoot $scriptRoot
+if ($null -eq $repoRoot) {
+    throw "gproxyt release requires an Nfirco superproject checkout; standalone checkouts support build.ps1 only"
+}
 $releaseDirectory = Join-Path $repoRoot ".tmp\gproxyt-release"
 $artifactPath = Join-Path $releaseDirectory "gproxyt.exe"
 $verificationPath = Join-Path $releaseDirectory "verified-gproxyt.exe"
@@ -52,7 +56,7 @@ function Assert-PublishedMetadata {
 }
 
 $version = Read-GproxytProjectVersion -ProjectPath $projectPath
-$readme = Read-GproxytReleaseReadme -ReadmePath $readmePath -Version $version
+$readme = New-GproxytReleaseReadme -ReadmePath $readmePath -Version $version
 $baseUrl = if ([string]::IsNullOrWhiteSpace($BaseUrl)) { "https://$AppDomain" } else { $BaseUrl }
 $baseUrl = $baseUrl.TrimEnd('/')
 

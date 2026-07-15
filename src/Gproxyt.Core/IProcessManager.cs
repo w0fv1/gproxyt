@@ -2,6 +2,6 @@ namespace Gproxyt.Core;
 
 public interface IProcessManager
 {
-    int Stop(ProcessScope scope);
-    int Start(ProxyLaunchPlan plan);
+    int Stop(PackageProcessScope scope);
+    int Start(ChatGptInstallation installation, ProxyLaunchPlan plan);
 }

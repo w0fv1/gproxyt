@@ -1,21 +1,27 @@
 namespace Gproxyt.Core;
 
-public sealed record ChatGptInstallation(string InstallLocation, string ExecutablePath)
+public sealed record ChatGptInstallation(
+    string PackageFullName,
+    string PackageFamilyName,
+    string AppUserModelId,
+    string InstallLocation,
+    string ExecutablePath)
 {
-    public const string PackageName = "OpenAI.Codex";
-    public const string RelativeExecutablePath = "app\\ChatGPT.exe";
-
-    public static ChatGptInstallation FromInstallLocation(string installLocation)
+    public static ChatGptInstallation FromRegistration(PackageRegistration registration)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(installLocation);
+        ArgumentNullException.ThrowIfNull(registration);
 
-        var fullLocation = Path.GetFullPath(installLocation.Trim());
-        var executablePath = Path.GetFullPath(Path.Combine(fullLocation, RelativeExecutablePath));
+        var executablePath = Path.GetFullPath(Path.Combine(registration.InstallLocation, ChatGptPackage.RelativeExecutablePath));
         if (!File.Exists(executablePath))
         {
             throw new FileNotFoundException("没有在 Microsoft Store 包中找到 ChatGPT.exe。", executablePath);
         }
 
-        return new ChatGptInstallation(fullLocation, executablePath);
+        return new ChatGptInstallation(
+            registration.PackageFullName,
+            ChatGptPackage.FamilyName,
+            ChatGptPackage.AppUserModelId,
+            registration.InstallLocation,
+            executablePath);
     }
 }

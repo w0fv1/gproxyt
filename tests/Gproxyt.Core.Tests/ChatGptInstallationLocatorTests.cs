@@ -12,7 +12,8 @@ public sealed class ChatGptInstallationLocatorTests : IDisposable
         var executable = Path.Combine(root, "app", "ChatGPT.exe");
         Directory.CreateDirectory(Path.GetDirectoryName(executable)!);
         File.WriteAllBytes(executable, []);
-        var locator = new ChatGptInstallationLocator(new StubPackageLocationSource(root));
+        var registration = new PackageRegistration("OpenAI.Codex_1.0.0.0_x64__2p2nqsd0c76g0", root);
+        var locator = new ChatGptInstallationLocator(new StubPackageRegistrationSource(registration));
 
         var installation = locator.Locate();
 
@@ -22,9 +23,21 @@ public sealed class ChatGptInstallationLocatorTests : IDisposable
     [Fact]
     public void Locate_reports_missing_store_package()
     {
-        var locator = new ChatGptInstallationLocator(new StubPackageLocationSource(null));
+        var locator = new ChatGptInstallationLocator(new StubPackageRegistrationSource());
 
         Assert.Throws<InvalidOperationException>(() => locator.Locate());
+    }
+
+    [Fact]
+    public void Locate_rejects_ambiguous_current_user_registrations()
+    {
+        var locator = new ChatGptInstallationLocator(new StubPackageRegistrationSource(
+            new PackageRegistration("OpenAI.Codex_1.0.0.0_x64__2p2nqsd0c76g0", root),
+            new PackageRegistration("OpenAI.Codex_2.0.0.0_x64__2p2nqsd0c76g0", root)));
+
+        var exception = Assert.Throws<InvalidOperationException>(() => locator.Locate());
+
+        Assert.Contains("更新", exception.Message);
     }
 
     public void Dispose()
@@ -35,8 +48,12 @@ public sealed class ChatGptInstallationLocatorTests : IDisposable
         }
     }
 
-    private sealed class StubPackageLocationSource(string? value) : IPackageLocationSource
+    private sealed class StubPackageRegistrationSource(params PackageRegistration[] registrations) : IPackageRegistrationSource
     {
-        public string? GetLatestInstallLocation() => value;
+        public IReadOnlyList<PackageRegistration> FindCurrentUserRegistrations(string packageFamilyName)
+        {
+            Assert.Equal(ChatGptPackage.FamilyName, packageFamilyName);
+            return registrations;
+        }
     }
 }

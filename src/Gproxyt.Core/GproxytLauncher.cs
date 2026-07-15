@@ -10,12 +10,30 @@ public sealed class GproxytLauncher(IChatGptInstallationLocator installationLoca
         ArgumentNullException.ThrowIfNull(settings);
         var normalized = settings.Normalize();
         var proxy = ProxyEndpoint.Parse(normalized.ProxyUrl);
-        var installation = installationLocator.Locate();
         var stoppedProcessCount = normalized.RestartExisting
-            ? processManager.Stop(new ProcessScope(installation.InstallLocation))
+            ? processManager.Stop(new PackageProcessScope(ChatGptPackage.FamilyName))
             : 0;
-        var plan = ProxyLaunchPlan.Create(installation.ExecutablePath, proxy);
-        var processId = processManager.Start(plan);
+        var installation = installationLocator.Locate();
+        var plan = ProxyLaunchPlan.Create(proxy);
+        int processId;
+        try
+        {
+            processId = processManager.Start(installation, plan);
+        }
+        catch (PackageLaunchTargetUnavailableException)
+        {
+            var currentInstallation = installationLocator.Locate();
+            if (string.Equals(
+                currentInstallation.PackageFullName,
+                installation.PackageFullName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                throw;
+            }
+
+            installation = currentInstallation;
+            processId = processManager.Start(installation, plan);
+        }
         return new LaunchResult(installation, proxy, stoppedProcessCount, processId);
     }
 }

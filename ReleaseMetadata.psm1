@@ -3,31 +3,26 @@ function Read-GproxytProjectVersion {
 
     [xml] $project = Get-Content -Raw -Path $ProjectPath
     $version = [string]$project.Project.PropertyGroup.Version | Select-Object -First 1
-    if ($version -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') {
+    if ($version -notmatch '^\d+\.\d+\.\d+-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*$') {
         throw "Gproxyt.csproj must declare a semantic Version"
     }
     return $version
 }
 
-function Read-GproxytReleaseReadme {
+function New-GproxytReleaseReadme {
     param(
         [Parameter(Mandatory)] [string] $ReadmePath,
         [Parameter(Mandatory)] [string] $Version
     )
 
     $readme = (Get-Content -Raw -Encoding UTF8 -Path $ReadmePath).TrimStart([char]0xFEFF).Trim()
-    $frontMatter = [regex]::Match($readme, '(?s)\A---\s*\r?\n(?<yaml>.*?)\r?\n---')
-    if (-not $frontMatter.Success) {
-        throw "README must start with YAML front matter"
+    if ([string]::IsNullOrWhiteSpace($readme)) {
+        throw "README must not be empty"
     }
-    $declaredVersion = [regex]::Match($frontMatter.Groups['yaml'].Value, '(?m)^\s*version\s*:\s*[''"]?(?<version>[^''"\r\n]+?)[''"]?\s*$')
-    if (-not $declaredVersion.Success) {
-        throw "README front matter must declare version"
+    if ([regex]::IsMatch($readme, '(?s)\A---\s*\r?\n.*?\r?\n---')) {
+        throw "README front matter is generated from the project version"
     }
-    if ($declaredVersion.Groups['version'].Value.Trim() -ne $Version) {
-        throw "README version does not match project version $Version"
-    }
-    return $readme
+    return "---`nversion: $Version`n---`n`n$readme"
 }
 
 function New-GproxytReleaseMetadata {
@@ -55,4 +50,4 @@ function New-GproxytReleaseMetadata {
     }
 }
 
-Export-ModuleMember -Function Read-GproxytProjectVersion, Read-GproxytReleaseReadme, New-GproxytReleaseMetadata
+Export-ModuleMember -Function Read-GproxytProjectVersion, New-GproxytReleaseReadme, New-GproxytReleaseMetadata
