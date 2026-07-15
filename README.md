@@ -1,6 +1,6 @@
 # gproxyt
 
-`gproxyt` 是 Windows ChatGPT 桌面应用的进程级代理启动器。它不修改 Windows 系统代理，只为新启动的 ChatGPT 进程树注入代理环境变量和 Chromium 代理参数。
+`gproxyt` 是 Windows ChatGPT 桌面应用的独立代理启动器。它不修改 Windows 系统代理，通过 Windows 程序包身份启动 ChatGPT，并为 Chromium 网络栈传入代理参数。
 
 默认代理：
 
@@ -32,6 +32,12 @@ winget install Codex -s msstore
 
 ```powershell
 gproxyt.exe --launch
+```
+
+需要诊断启动问题时添加 `--debug`。日志会写入命令运行时的当前目录，文件名格式为 `gproxyt-debug-yyyyMMdd-HHmmss-PID.log`：
+
+```powershell
+gproxyt.exe --debug --launch
 ```
 
 命令行创建快捷方式：
@@ -78,6 +84,6 @@ https://next.firco.cn/release/gproxyt
 
 ## 代理范围
 
-启动器在程序包激活期间设置 `HTTP_PROXY`、`HTTPS_PROXY`、`ALL_PROXY`、`NO_PROXY` 和 `NODE_USE_ENV_PROXY`，并传入 Chromium 的 `--proxy-server` 与 loopback bypass 参数。Windows 环境变量名不区分大小写，因此使用小写变量名读取时等价。ChatGPT 后续创建的内置 Codex 等子进程会继承同一代理环境。激活完成后会立即恢复程序包调试状态，不修改系统代理和用户环境变量。
+启动器传入 Chromium 的 `--proxy-server` 与 loopback bypass 参数，使 ChatGPT 的 Chromium 网络请求使用指定代理。它不修改系统代理和用户环境变量。
 
 启动前关闭进程时，只匹配 `OpenAI.Codex` Store 包族身份，并覆盖更新前后的所有版本；不会终止 VS Code 扩展或其他位置的 Codex 进程。安装位置只从当前用户已注册的主程序包解析，不会误用仅完成 Stage 的待更新版本。

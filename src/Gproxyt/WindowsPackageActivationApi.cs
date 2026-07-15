@@ -1,33 +1,16 @@
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Gproxyt;
 
 internal sealed class WindowsPackageActivationApi : IWindowsPackageActivationApi
 {
     private const uint ActivateOptionsNoErrorUi = 0x00000002;
+    private const int ShowWindowRestore = 9;
     private static readonly Guid PackageDebugSettingsClassId = new("B1AEC16F-2383-4852-B0E9-8F0B1DC66B4D");
     private static readonly Guid ApplicationActivationManagerClassId = new("45BA127D-10A8-46EA-8AB7-56EA9078943C");
-
-    public void EnableDebugging(string packageFullName, IReadOnlyDictionary<string, string> environment)
-    {
-        using var environmentBlock = new WindowsEnvironmentBlock(environment);
-        var executablePath = Environment.ProcessPath
-            ?? throw new InvalidOperationException("无法确定 gproxyt 可执行文件位置。");
-        if (executablePath.Contains('"'))
-        {
-            throw new InvalidOperationException("gproxyt 可执行文件路径包含 Windows 不支持的字符。");
-        }
-        var debuggerCommandLine = $"\"{executablePath}\" --package-debugger";
-        var settings = CreateComInstance<IPackageDebugSettings>(PackageDebugSettingsClassId);
-        try
-        {
-            Marshal.ThrowExceptionForHR(settings.EnableDebugging(packageFullName, debuggerCommandLine, environmentBlock.Pointer));
-        }
-        finally
-        {
-            Marshal.FinalReleaseComObject(settings);
-        }
-    }
 
     public int ActivateApplication(string appUserModelId, string arguments)
     {
@@ -53,17 +36,107 @@ internal sealed class WindowsPackageActivationApi : IWindowsPackageActivationApi
         return WindowsPackageApi.GetProcessPackageFamilyName(handle);
     }
 
-    public void DisableDebugging(string packageFullName)
+    public bool WaitForProcessExit(int processId, int milliseconds)
+    {
+        using var handle = WindowsPackageApi.OpenProcessForPackageQuery(processId);
+        return WindowsPackageApi.WaitForProcessExit(handle, milliseconds);
+    }
+
+    public void TerminateAllProcesses(string packageFullName)
     {
         var settings = CreateComInstance<IPackageDebugSettings>(PackageDebugSettingsClassId);
         try
         {
-            Marshal.ThrowExceptionForHR(settings.DisableDebugging(packageFullName));
+            Marshal.ThrowExceptionForHR(settings.TerminateAllProcesses(packageFullName));
         }
         finally
         {
             Marshal.FinalReleaseComObject(settings);
         }
+    }
+
+    public bool WaitForPackageExit(string packageFamilyName, int milliseconds)
+    {
+        var elapsed = Stopwatch.StartNew();
+        while (elapsed.ElapsedMilliseconds < milliseconds)
+        {
+            if (!IsPackageRunning(packageFamilyName))
+            {
+                return true;
+            }
+            Thread.Sleep(50);
+        }
+        return !IsPackageRunning(packageFamilyName);
+    }
+
+    public bool EnsureProcessWindowVisible(int processId, int milliseconds)
+    {
+        var elapsed = Stopwatch.StartNew();
+        while (elapsed.ElapsedMilliseconds < milliseconds)
+        {
+            var window = FindApplicationWindow(processId);
+            if (window != IntPtr.Zero)
+            {
+                if (!IsWindowVisible(window))
+                {
+                    ShowWindowAsync(window, ShowWindowRestore);
+                }
+                SetForegroundWindow(window);
+                if (IsWindowVisible(window))
+                {
+                    return true;
+                }
+            }
+            Thread.Sleep(50);
+        }
+        return false;
+    }
+
+    private static bool IsPackageRunning(string packageFamilyName)
+    {
+        foreach (var process in Process.GetProcesses())
+        {
+            using (process)
+            {
+                try
+                {
+                    using var handle = WindowsPackageApi.OpenProcessForPackageQuery(process.Id);
+                    if (string.Equals(
+                        packageFamilyName,
+                        WindowsPackageApi.GetProcessPackageFamilyName(handle),
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                catch (Win32Exception exception) when (exception.NativeErrorCode is 5 or 6 or 87)
+                {
+                }
+            }
+        }
+        return false;
+    }
+
+    private static IntPtr FindApplicationWindow(int processId)
+    {
+        var result = IntPtr.Zero;
+        EnumWindows((window, _) =>
+        {
+            GetWindowThreadProcessId(window, out var ownerProcessId);
+            if (ownerProcessId != processId)
+            {
+                return true;
+            }
+            var title = new StringBuilder(256);
+            GetWindowText(window, title, title.Capacity);
+            if (title.Length == 0)
+            {
+                return true;
+            }
+            result = window;
+            return false;
+        }, IntPtr.Zero);
+        return result;
     }
 
     private static T CreateComInstance<T>(Guid classId)
@@ -87,6 +160,15 @@ internal sealed class WindowsPackageActivationApi : IWindowsPackageActivationApi
 
         [PreserveSig]
         int DisableDebugging([MarshalAs(UnmanagedType.LPWStr)] string packageFullName);
+
+        [PreserveSig]
+        int Suspend([MarshalAs(UnmanagedType.LPWStr)] string packageFullName);
+
+        [PreserveSig]
+        int Resume([MarshalAs(UnmanagedType.LPWStr)] string packageFullName);
+
+        [PreserveSig]
+        int TerminateAllProcesses([MarshalAs(UnmanagedType.LPWStr)] string packageFullName);
     }
 
     [ComImport]
@@ -101,4 +183,28 @@ internal sealed class WindowsPackageActivationApi : IWindowsPackageActivationApi
             uint options,
             out uint processId);
     }
+
+    private delegate bool EnumWindowsCallback(IntPtr window, IntPtr parameter);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool EnumWindows(EnumWindowsCallback callback, IntPtr parameter);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(IntPtr window, out int processId);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetWindowText(IntPtr window, StringBuilder text, int maximumCount);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool IsWindowVisible(IntPtr window);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShowWindowAsync(IntPtr window, int command);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool SetForegroundWindow(IntPtr window);
 }

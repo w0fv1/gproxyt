@@ -7,12 +7,11 @@ namespace Gproxyt.Windows.Tests;
 public sealed class WindowsPackageRegistrationSourceTests
 {
     [Fact]
-    public void Process_handle_supports_session_and_package_identity_queries()
+    public void Process_handle_supports_package_identity_queries()
     {
         using var process = Process.GetCurrentProcess();
         using var handle = WindowsPackageApi.OpenProcessForPackageQuery(process.Id);
 
-        Assert.Equal(process.SessionId, WindowsPackageApi.GetProcessSessionId(handle));
         WindowsPackageApi.GetProcessPackageFamilyName(handle);
     }
 

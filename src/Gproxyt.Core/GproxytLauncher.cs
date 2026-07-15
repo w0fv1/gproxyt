@@ -10,10 +10,11 @@ public sealed class GproxytLauncher(IChatGptInstallationLocator installationLoca
         ArgumentNullException.ThrowIfNull(settings);
         var normalized = settings.Normalize();
         var proxy = ProxyEndpoint.Parse(normalized.ProxyUrl);
-        var stoppedProcessCount = normalized.RestartExisting
-            ? processManager.Stop(new PackageProcessScope(ChatGptPackage.FamilyName))
-            : 0;
         var installation = installationLocator.Locate();
+        if (normalized.RestartExisting)
+        {
+            processManager.Stop(installation);
+        }
         var plan = ProxyLaunchPlan.Create(proxy);
         int processId;
         try
@@ -32,8 +33,12 @@ public sealed class GproxytLauncher(IChatGptInstallationLocator installationLoca
             }
 
             installation = currentInstallation;
+            if (normalized.RestartExisting)
+            {
+                processManager.Stop(installation);
+            }
             processId = processManager.Start(installation, plan);
         }
-        return new LaunchResult(installation, proxy, stoppedProcessCount, processId);
+        return new LaunchResult(installation, proxy, processId);
     }
 }

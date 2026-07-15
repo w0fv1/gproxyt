@@ -18,11 +18,11 @@ public sealed class GproxytLauncherTests : IDisposable
 
         var result = launcher.Launch(new LauncherSettings("127.0.0.1:7890", restartExisting, false));
 
-        Assert.Equal(restartExisting ? ["stop", "locate", "start"] : ["locate", "start"], events);
+        Assert.Equal(restartExisting ? ["locate", "stop", "start"] : ["locate", "start"], events);
         Assert.Equal(expectedStopCalls, processes.StopCalls);
         var started = Assert.Single(processes.Starts);
         Assert.Equal(installation, started.Installation);
-        Assert.Equal("http://127.0.0.1:7890", started.Plan.Environment["HTTPS_PROXY"]);
+        Assert.Contains("--proxy-server=http://127.0.0.1:7890", started.Plan.Arguments);
         Assert.Equal(42, result.ProcessId);
         Assert.Equal(installation, result.Installation);
     }
@@ -42,7 +42,7 @@ public sealed class GproxytLauncherTests : IDisposable
 
         var result = launcher.Launch(new LauncherSettings("127.0.0.1:7890", true, false));
 
-        Assert.Equal(["stop", "locate", "start", "locate", "start"], events);
+        Assert.Equal(["locate", "stop", "start", "locate", "stop", "start"], events);
         Assert.Equal([oldInstallation, currentInstallation], processes.Starts.Select(start => start.Installation));
         Assert.Equal(currentInstallation, result.Installation);
         Assert.Equal(42, result.ProcessId);
@@ -156,12 +156,11 @@ public sealed class GproxytLauncherTests : IDisposable
         public int StopCalls { get; private set; }
         public List<(ChatGptInstallation Installation, ProxyLaunchPlan Plan)> Starts { get; } = [];
 
-        public int Stop(PackageProcessScope scope)
+        public void Stop(ChatGptInstallation installation)
         {
-            Assert.True(scope.Contains(ChatGptPackage.FamilyName));
+            Assert.Equal(ChatGptPackage.FamilyName, installation.PackageFamilyName);
             events.Add("stop");
             StopCalls++;
-            return 3;
         }
 
         public int Start(ChatGptInstallation installation, ProxyLaunchPlan plan)
@@ -181,7 +180,9 @@ public sealed class GproxytLauncherTests : IDisposable
         public ManualResetEventSlim StartEntered { get; } = new(false);
         public ManualResetEventSlim Release { get; } = new(false);
 
-        public int Stop(PackageProcessScope scope) => 0;
+        public void Stop(ChatGptInstallation installation)
+        {
+        }
 
         public int Start(ChatGptInstallation installation, ProxyLaunchPlan plan)
         {

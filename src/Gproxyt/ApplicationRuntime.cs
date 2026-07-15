@@ -5,20 +5,30 @@ namespace Gproxyt;
 internal sealed class ApplicationRuntime
 {
     private readonly LauncherSettingsStore settingsStore = AppPaths.CreateSettingsStore();
+    private readonly IApplicationLog log;
     private readonly IChatGptInstallationLocator installationLocator;
     private readonly GproxytLauncher launcher;
     private readonly WindowsStartupRegistration startupRegistration = new();
 
-    public ApplicationRuntime()
+    public ApplicationRuntime(IApplicationLog log)
     {
-        installationLocator = new ChatGptInstallationLocator(new WindowsPackageRegistrationSource());
-        launcher = new GproxytLauncher(installationLocator, new WindowsProcessManager());
+        this.log = log;
+        installationLocator = new ChatGptInstallationLocator(new WindowsPackageRegistrationSource(log));
+        launcher = new GproxytLauncher(installationLocator, new WindowsProcessManager(log));
         Diagnostics = new EnvironmentDiagnostics(installationLocator);
     }
 
     public EnvironmentDiagnostics Diagnostics { get; }
 
-    public LauncherSettings LoadSettings() => settingsStore.Load();
+    public LauncherSettings LoadSettings()
+    {
+        var settings = settingsStore.Load();
+        log.Information(
+            "settings_loaded",
+            ("RestartExisting", settings.RestartExisting),
+            ("StartWithWindows", settings.StartWithWindows));
+        return settings;
+    }
 
     public void SynchronizeStartup() => startupRegistration.Apply(LoadSettings().StartWithWindows);
 
@@ -27,20 +37,48 @@ internal sealed class ApplicationRuntime
         var normalized = settings.Normalize();
         settingsStore.Save(normalized);
         startupRegistration.Apply(normalized.StartWithWindows);
+        log.Information(
+            "settings_saved",
+            ("RestartExisting", normalized.RestartExisting),
+            ("StartWithWindows", normalized.StartWithWindows));
         return normalized;
     }
 
     public async Task<LaunchResult> LaunchAsync(LauncherSettings settings)
     {
-        var normalized = SaveSettings(settings);
-        var proxy = ProxyEndpoint.Parse(normalized.ProxyUrl);
-        await Diagnostics.EnsureProxyReachableAsync(proxy);
-        return await launcher.LaunchAsync(normalized);
+        try
+        {
+            var normalized = SaveSettings(settings);
+            var proxy = ProxyEndpoint.Parse(normalized.ProxyUrl);
+            var uri = new Uri(proxy.Value);
+            log.Information(
+                "launch_started",
+                ("ProxyScheme", uri.Scheme),
+                ("ProxyHost", uri.Host),
+                ("ProxyPort", uri.Port),
+                ("RestartExisting", normalized.RestartExisting));
+            await Diagnostics.EnsureProxyReachableAsync(proxy);
+            log.Information("proxy_reachable");
+            var result = await launcher.LaunchAsync(normalized);
+            log.Information(
+                "launch_completed",
+                ("PackageFullName", result.Installation.PackageFullName),
+                ("AppUserModelId", result.Installation.AppUserModelId),
+                ("ProcessId", result.ProcessId));
+            return result;
+        }
+        catch (Exception exception)
+        {
+            log.Error(exception, "launch_failed");
+            throw;
+        }
     }
 
     public string CreateShortcut()
     {
         var installation = installationLocator.Locate();
-        return ShortcutService.Create(installation.ExecutablePath);
+        var path = ShortcutService.Create(installation.ExecutablePath);
+        log.Information("shortcut_created", ("Path", path));
+        return path;
     }
 }

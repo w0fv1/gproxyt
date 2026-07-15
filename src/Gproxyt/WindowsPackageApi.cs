@@ -10,7 +10,6 @@ internal static class WindowsPackageApi
 {
     private const uint PackageFilterHead = 0x00000010;
     private const uint ProcessPackageQueryAccess = 0x00100400;
-    private const uint ProcessTerminateAccess = 0x00000001;
     private const int ErrorSuccess = 0;
     private const int ErrorInsufficientBuffer = 122;
     private const int AppmodelErrorNoPackage = 15700;
@@ -105,9 +104,6 @@ internal static class WindowsPackageApi
     public static SafeProcessHandle OpenProcessForPackageQuery(int processId) =>
         OpenProcess(processId, ProcessPackageQueryAccess);
 
-    public static SafeProcessHandle OpenProcessForTermination(int processId) =>
-        OpenProcess(processId, ProcessTerminateAccess);
-
     private static SafeProcessHandle OpenProcess(int processId, uint access)
     {
         var process = OpenProcessNative(access, false, checked((uint)processId));
@@ -119,28 +115,6 @@ internal static class WindowsPackageApi
         var error = Marshal.GetLastWin32Error();
         process.Dispose();
         throw new Win32Exception(error, $"无法打开进程 PID {processId}。");
-    }
-
-    public static int GetProcessSessionId(SafeProcessHandle process)
-    {
-        var processId = GetProcessId(process);
-        if (processId == 0)
-        {
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "无法读取进程 ID。");
-        }
-        if (!ProcessIdToSessionId(processId, out var sessionId))
-        {
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "无法读取进程会话。");
-        }
-        return checked((int)sessionId);
-    }
-
-    public static void TerminateProcess(SafeProcessHandle process)
-    {
-        if (!TerminateProcessNative(process, uint.MaxValue))
-        {
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "无法终止 ChatGPT 进程。");
-        }
     }
 
     public static bool WaitForProcessExit(SafeProcessHandle process, int timeoutMilliseconds)
@@ -201,22 +175,11 @@ internal static class WindowsPackageApi
         ref uint packageFamilyNameLength,
         StringBuilder? packageFamilyName);
 
-    [DllImport("kernel32.dll", EntryPoint = "TerminateProcess", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool TerminateProcessNative(SafeProcessHandle process, uint exitCode);
-
     [DllImport("kernel32.dll", EntryPoint = "OpenProcess", SetLastError = true)]
     private static extern SafeProcessHandle OpenProcessNative(
         uint desiredAccess,
         [MarshalAs(UnmanagedType.Bool)] bool inheritHandle,
         uint processId);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern uint GetProcessId(SafeProcessHandle process);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool ProcessIdToSessionId(uint processId, out uint sessionId);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern uint WaitForSingleObject(SafeProcessHandle handle, uint milliseconds);
