@@ -26,6 +26,8 @@ winget install Codex -s msstore
 
 运行 `gproxyt.exe`，点击窗口中央的启动按钮。
 
+普通窗口模式为当前 Windows 会话单实例。再次运行时不会创建第二个窗口，而是还原并置前已经打开的 gproxyt。
+
 右上角设置按钮可以修改代理 URL 和开机自启。开机自启只写入当前用户的 Windows Run 项，并使用 `--launch` 直接通过代理启动 ChatGPT。
 
 命令行直接启动：

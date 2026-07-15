@@ -63,6 +63,9 @@ public partial class MainWindow : FluentWindow
 
     private void CloseWindow(object sender, RoutedEventArgs eventArgs) => Close();
 
+    internal bool RestoreAndActivate() =>
+        WindowsForegroundActivation.RestoreAndActivate(settingsWindow is not null ? settingsWindow : this);
+
     private async void LaunchChatGpt(object sender, RoutedEventArgs eventArgs)
     {
         try

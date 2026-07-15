@@ -5,7 +5,9 @@ namespace Gproxyt;
 
 public partial class App : Application
 {
+    private const string InteractiveInstanceId = "gproxyt";
     private IApplicationLog log = ApplicationLog.None;
+    private SingleInstanceCoordinator? singleInstance;
 
     protected override async void OnStartup(StartupEventArgs eventArgs)
     {
@@ -22,6 +24,22 @@ public partial class App : Application
                 ("Launch", options.Launch),
                 ("CreateShortcut", options.CreateShortcut),
                 ("LogFile", log.FilePath));
+            if (options.RequiresInteractiveWindow)
+            {
+                singleInstance = new SingleInstanceCoordinator(InteractiveInstanceId);
+                if (!singleInstance.IsPrimary)
+                {
+                    var foregroundPermissionGranted =
+                        WindowsForegroundActivation.GrantExistingInstanceForegroundPermission();
+                    singleInstance.NotifyPrimary();
+                    log.Information(
+                        "existing_instance_activation_requested",
+                        ("ForegroundPermissionGranted", foregroundPermissionGranted));
+                    Shutdown();
+                    return;
+                }
+                log.Information("primary_instance_acquired");
+            }
             ApplicationThemeManager.ApplySystemTheme();
             var runtime = new ApplicationRuntime(log);
             runtime.SynchronizeStartup();
@@ -39,8 +57,28 @@ public partial class App : Application
                 return;
             }
 
-            MainWindow = new MainWindow(runtime);
-            MainWindow.Show();
+            var mainWindow = new MainWindow(runtime);
+            MainWindow = mainWindow;
+            mainWindow.Show();
+            singleInstance!.StartListening(() =>
+            {
+                if (Dispatcher.HasShutdownStarted)
+                {
+                    return;
+                }
+                Dispatcher.BeginInvoke(() =>
+                {
+                    try
+                    {
+                        var activated = mainWindow.RestoreAndActivate();
+                        log.Information("existing_instance_activated", ("ForegroundActivated", activated));
+                    }
+                    catch (Exception exception)
+                    {
+                        log.Error(exception, "existing_instance_activation_failed");
+                    }
+                });
+            });
         }
         catch (Exception exception)
         {
@@ -52,6 +90,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs eventArgs)
     {
+        singleInstance?.Dispose();
         log.Information("application_exited", ("ExitCode", eventArgs.ApplicationExitCode));
         log.Dispose();
         base.OnExit(eventArgs);
