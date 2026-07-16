@@ -48,7 +48,7 @@ function Assert-PublishedMetadata {
         [Parameter(Mandatory)] [Collections.IDictionary] $Expected
     )
 
-    foreach ($property in @('appKey', 'platform', 'version', 'fileName', 'fileSizeBytes', 'sha256', 'sha512', 'readme')) {
+    foreach ($property in @('appKey', 'platform', 'version', 'fileName', 'fileSizeBytes', 'sha256', 'sha512', 'readme', 'website')) {
         if ([string]$Actual.$property -ne [string]$Expected[$property]) {
             throw "Published metadata mismatch: $property"
         }
@@ -66,7 +66,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "gproxyt build failed with exit code $LASTEXITCODE"
 }
 
-$metadata = New-GproxytReleaseMetadata -ArtifactPath $artifactPath -Version $version -Readme $readme
+$metadata = New-GproxytReleaseMetadata -ArtifactPath $artifactPath -Version $version -Readme $readme -Website "$baseUrl/gproxyt"
 $credential = Read-NfircoBackendApiCredential -RepoRoot $repoRoot -Profile $CredentialProfile
 $authorization = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("$($credential.Username):$($credential.Password)"))
 $headers = @{ Authorization = "Basic $authorization" }

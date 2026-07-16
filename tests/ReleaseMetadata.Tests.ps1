@@ -44,7 +44,7 @@ Describe "gproxyt release metadata" {
         $artifactPath = Join-Path $TestDrive "gproxyt.exe"
         [IO.File]::WriteAllBytes($artifactPath, [byte[]](1, 2, 3, 4))
 
-        $metadata = New-GproxytReleaseMetadata -ArtifactPath $artifactPath -Version "1.0.1-stable" -Readme "release"
+        $metadata = New-GproxytReleaseMetadata -ArtifactPath $artifactPath -Version "1.0.1-stable" -Readme "release" -Website "https://next.firco.cn/gproxyt"
 
         $metadata.appKey | Should Be "gproxyt"
         $metadata.platform | Should Be "windows-x64"
@@ -52,6 +52,7 @@ Describe "gproxyt release metadata" {
         $metadata.fileSizeBytes | Should Be 4
         $metadata.mimeType | Should Be "application/vnd.microsoft.portable-executable"
         $metadata.access | Should Be "PUBLIC"
+        $metadata.website | Should Be "https://next.firco.cn/gproxyt"
         $metadata.sha256 | Should Be ((Get-FileHash $artifactPath -Algorithm SHA256).Hash.ToLowerInvariant())
         $metadata.sha512 | Should Be ((Get-FileHash $artifactPath -Algorithm SHA512).Hash.ToLowerInvariant())
     }

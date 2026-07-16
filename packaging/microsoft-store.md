@@ -13,8 +13,10 @@
 | Store 协议链接 | `ms-windows-store://pdp/?productid=9P3M0G0LP9ZD` |
 | 中国区目标零售价 | ¥0.99 |
 | 类别 | 实用工具与工具 |
-| 隐私政策 | <https://next.firco.cn/release/gproxyt/privacy> |
-| 支持页面 | <https://next.firco.cn/release/gproxyt> |
+| 官网 | <https://next.firco.cn/gproxyt> |
+| 隐私政策 | <https://next.firco.cn/gproxyt/privacy> |
+| 使用条款 | <https://next.firco.cn/gproxyt/terms> |
+| 支持页面 | <https://next.firco.cn/gproxyt> |
 
 ## 程序包身份
 

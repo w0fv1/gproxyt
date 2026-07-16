@@ -29,7 +29,8 @@ function New-GproxytReleaseMetadata {
     param(
         [Parameter(Mandatory)] [string] $ArtifactPath,
         [Parameter(Mandatory)] [string] $Version,
-        [Parameter(Mandatory)] [string] $Readme
+        [Parameter(Mandatory)] [string] $Readme,
+        [Parameter(Mandatory)] [string] $Website
     )
 
     $file = Get-Item -Path $ArtifactPath
@@ -46,6 +47,7 @@ function New-GproxytReleaseMetadata {
         sha512 = (Get-FileHash -Path $file.FullName -Algorithm SHA512).Hash.ToLowerInvariant()
         mimeType = 'application/vnd.microsoft.portable-executable'
         readme = $Readme
+        website = $Website
         access = 'PUBLIC'
     }
 }
