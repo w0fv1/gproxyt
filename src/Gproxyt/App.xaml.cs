@@ -42,7 +42,7 @@ public partial class App : Application
             }
             ApplicationThemeManager.ApplySystemTheme();
             var runtime = new ApplicationRuntime(log);
-            runtime.SynchronizeStartup();
+            await runtime.SynchronizeStartupAsync();
             if (options.Launch)
             {
                 await runtime.LaunchAsync(runtime.LoadSettings());

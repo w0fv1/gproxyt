@@ -30,7 +30,7 @@ public partial class MainWindow : FluentWindow
         }
     }
 
-    private void OpenSettings(object sender, RoutedEventArgs eventArgs)
+    private async void OpenSettings(object sender, RoutedEventArgs eventArgs)
     {
         if (settingsWindow is not null)
         {
@@ -45,7 +45,7 @@ public partial class MainWindow : FluentWindow
             {
                 try
                 {
-                    settings = runtime.SaveSettings(settingsWindow.Settings);
+                    settings = await runtime.SaveSettingsAsync(settingsWindow.Settings);
                 }
                 catch (Exception exception)
                 {

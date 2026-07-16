@@ -31,4 +31,22 @@ public sealed class ApplicationOptionsTests
 
         Assert.True(options.RequiresInteractiveWindow);
     }
+
+    [Fact]
+    public void Parse_launches_without_a_window_from_the_packaged_startup_executable()
+    {
+        var options = ApplicationOptions.Parse([], "gproxyt-startup.exe");
+
+        Assert.True(options.Launch);
+        Assert.False(options.RequiresInteractiveWindow);
+    }
+
+    [Fact]
+    public void Parse_keeps_the_main_executable_interactive()
+    {
+        var options = ApplicationOptions.Parse([], "gproxyt.exe");
+
+        Assert.False(options.Launch);
+        Assert.True(options.RequiresInteractiveWindow);
+    }
 }

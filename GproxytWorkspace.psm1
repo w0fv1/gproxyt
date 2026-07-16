@@ -29,4 +29,15 @@ function Find-NfircoSuperprojectRoot {
     }
 }
 
-Export-ModuleMember -Function Find-NfircoSuperprojectRoot
+function Resolve-GproxytDotnet {
+    param([Parameter(Mandatory)] [string] $ProjectRoot)
+
+    $repoRoot = Find-NfircoSuperprojectRoot -ProjectRoot $ProjectRoot
+    $localDotnet = if ($null -ne $repoRoot) { Join-Path $repoRoot ".tmp\dotnet\dotnet.exe" } else { $null }
+    if ($null -ne $localDotnet -and (Test-Path -LiteralPath $localDotnet -PathType Leaf)) {
+        return $localDotnet
+    }
+    return (Get-Command dotnet -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+}
+
+Export-ModuleMember -Function Find-NfircoSuperprojectRoot, Resolve-GproxytDotnet

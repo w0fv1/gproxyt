@@ -2,12 +2,12 @@ using Microsoft.Win32;
 
 namespace Gproxyt;
 
-internal sealed class WindowsStartupRegistration
+internal sealed class WindowsStartupRegistration : IStartupRegistration
 {
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
     private const string ValueName = "gproxyt";
 
-    public void Apply(bool enabled)
+    public Task ApplyAsync(bool enabled)
     {
         using var key = Registry.CurrentUser.CreateSubKey(RunKeyPath, true);
         if (enabled)
@@ -19,5 +19,6 @@ internal sealed class WindowsStartupRegistration
         {
             key.DeleteValue(ValueName, false);
         }
+        return Task.CompletedTask;
     }
 }

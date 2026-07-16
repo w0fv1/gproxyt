@@ -68,6 +68,30 @@ gproxyt.exe --create-shortcut
 dist\gproxyt.exe
 ```
 
+## Microsoft Store
+
+Microsoft Store 使用与独立版本相同的源码、版本和图像资源生成 x64 MSIX。项目版本 `x.y.z-label` 自动映射为商店版本 `x.y.z.0`，商店身份固定为 `LaiqiInfo.GProxyT`。
+
+安装 Windows App Development CLI：
+
+```powershell
+winget install --id Microsoft.WinAppCli --exact --source winget
+```
+
+生成提交 Partner Center 的未签名 MSIX：
+
+```powershell
+.\store-build.ps1
+```
+
+输出位置：
+
+```text
+dist\store\GProxyT_<version>_x64.msix
+```
+
+商店版使用 Windows 程序包启动任务实现开机自启，独立版本继续使用当前用户的 Windows Run 项。程序包升级不会依赖版本化的安装路径。
+
 ## 发布
 
 运行：
@@ -83,6 +107,12 @@ dist\gproxyt.exe
 ```text
 https://next.firco.cn/release/gproxyt
 ```
+
+## 隐私
+
+GProxyT 不要求创建账户，不收集、上传、出售或共享个人数据。代理设置只保存在当前 Windows 用户的 `%APPDATA%\gproxyt` 目录。只有用户主动使用 `--debug` 时才会在指定的本机目录生成诊断日志，日志不会自动上传。
+
+GProxyT 是独立的第三方工具，与 OpenAI 不存在隶属、赞助或认可关系。ChatGPT 和相关标志归其各自权利人所有。
 
 ## 代理范围
 

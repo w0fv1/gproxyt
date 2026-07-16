@@ -8,7 +8,7 @@ internal sealed class ApplicationRuntime
     private readonly IApplicationLog log;
     private readonly IChatGptInstallationLocator installationLocator;
     private readonly GproxytLauncher launcher;
-    private readonly WindowsStartupRegistration startupRegistration = new();
+    private readonly IStartupRegistration startupRegistration = StartupRegistration.Create();
 
     public ApplicationRuntime(IApplicationLog log)
     {
@@ -30,13 +30,13 @@ internal sealed class ApplicationRuntime
         return settings;
     }
 
-    public void SynchronizeStartup() => startupRegistration.Apply(LoadSettings().StartWithWindows);
+    public Task SynchronizeStartupAsync() => startupRegistration.ApplyAsync(LoadSettings().StartWithWindows);
 
-    public LauncherSettings SaveSettings(LauncherSettings settings)
+    public async Task<LauncherSettings> SaveSettingsAsync(LauncherSettings settings)
     {
         var normalized = settings.Normalize();
+        await startupRegistration.ApplyAsync(normalized.StartWithWindows);
         settingsStore.Save(normalized);
-        startupRegistration.Apply(normalized.StartWithWindows);
         log.Information(
             "settings_saved",
             ("RestartExisting", normalized.RestartExisting),
@@ -48,7 +48,7 @@ internal sealed class ApplicationRuntime
     {
         try
         {
-            var normalized = SaveSettings(settings);
+            var normalized = await SaveSettingsAsync(settings);
             var proxy = ProxyEndpoint.Parse(normalized.ProxyUrl);
             var uri = new Uri(proxy.Value);
             log.Information(

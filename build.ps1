@@ -6,13 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 Import-Module (Join-Path $projectRoot "GproxytWorkspace.psm1") -Force
-$repoRoot = Find-NfircoSuperprojectRoot -ProjectRoot $projectRoot
-$localDotnet = if ($null -ne $repoRoot) { Join-Path $repoRoot ".tmp\dotnet\dotnet.exe" } else { $null }
-$dotnet = if ($null -ne $localDotnet -and (Test-Path -LiteralPath $localDotnet -PathType Leaf)) {
-    $localDotnet
-} else {
-    (Get-Command dotnet -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
-}
+$dotnet = Resolve-GproxytDotnet -ProjectRoot $projectRoot
 $publishDirectory = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     Join-Path $projectRoot "dist"
 } else {
@@ -20,7 +14,7 @@ $publishDirectory = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
 }
 
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = "1"
-& $dotnet test (Join-Path $projectRoot "Gproxyt.slnx") -c Release --nologo
+& (Join-Path $projectRoot "test.ps1") -DotnetPath $dotnet
 if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
