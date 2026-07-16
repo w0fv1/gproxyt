@@ -1,5 +1,4 @@
 using System.Globalization;
-using Lepo.i18n;
 
 namespace Gproxyt.Windows.Tests;
 
@@ -8,12 +7,19 @@ public sealed class AppLocalizationTests
     [Fact]
     public void Loads_every_embedded_translation_into_the_localization_provider()
     {
-        var builder = new LocalizationBuilder();
-
-        AppLocalization.Configure(builder, new CultureInfo("zh-CN"));
-        var provider = builder.Build();
-
-        Assert.Equal("zh-CN", provider.GetCulture().Name);
+        var originalCulture = AppLocalization.Current.Culture;
+        try
+        {
+            foreach (var culture in AppLocalization.SupportedCultures)
+            {
+                AppLocalization.ApplyCulture(culture);
+                Assert.False(string.IsNullOrWhiteSpace(AppLocalization.Current["AppName"]));
+            }
+        }
+        finally
+        {
+            AppLocalization.ApplyCulture(originalCulture);
+        }
     }
 
     [Theory]
@@ -34,5 +40,25 @@ public sealed class AppLocalizationTests
     public void Resolves_a_saved_culture_with_system_fallback(string? saved, string system, string expected)
     {
         Assert.Equal(expected, AppLocalization.ResolveConfiguredCulture(saved, new CultureInfo(system)).Name);
+    }
+
+    [Fact]
+    public void Applying_a_culture_notifies_existing_windows_and_replaces_their_strings()
+    {
+        var originalCulture = AppLocalization.Current.Culture;
+        var changedProperties = new List<string?>();
+        AppLocalization.Current.PropertyChanged += (_, eventArgs) => changedProperties.Add(eventArgs.PropertyName);
+
+        try
+        {
+            AppLocalization.ApplyCulture(new CultureInfo("ja-JP"));
+
+            Assert.Equal("ChatGPT を開く", AppLocalization.Current["LaunchChatGpt"]);
+            Assert.Contains("Item[]", changedProperties);
+        }
+        finally
+        {
+            AppLocalization.ApplyCulture(originalCulture);
+        }
     }
 }

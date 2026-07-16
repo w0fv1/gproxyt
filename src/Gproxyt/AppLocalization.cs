@@ -1,14 +1,13 @@
 using System.Globalization;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Windows;
-using Lepo.i18n;
-using Lepo.i18n.Wpf;
 
 namespace Gproxyt;
 
-internal sealed class AppLocalization
+public sealed class AppLocalization : INotifyPropertyChanged
 {
     internal static readonly CultureInfo[] SupportedCultures =
     [
@@ -21,8 +20,8 @@ internal sealed class AppLocalization
     private static readonly Assembly Assembly = typeof(AppLocalization).Assembly;
     private static readonly Dictionary<string, CultureInfo> CulturesByName = SupportedCultures
         .ToDictionary(culture => culture.Name, StringComparer.OrdinalIgnoreCase);
-    private static AppLocalization current = Load(CulturesByName["en-US"]);
-    private readonly IReadOnlyDictionary<string, string> strings;
+    private static readonly AppLocalization current = Load(CulturesByName["en-US"]);
+    private IReadOnlyDictionary<string, string> strings;
 
     private AppLocalization(CultureInfo culture, IReadOnlyDictionary<string, string> strings)
     {
@@ -30,42 +29,31 @@ internal sealed class AppLocalization
         this.strings = strings;
     }
 
-    internal static AppLocalization Current => current;
+    public static AppLocalization Current => current;
 
-    internal CultureInfo Culture { get; }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    internal FlowDirection FlowDirection => Culture.TextInfo.IsRightToLeft
+    public CultureInfo Culture { get; private set; }
+
+    public FlowDirection FlowDirection => Culture.TextInfo.IsRightToLeft
         ? FlowDirection.RightToLeft
         : FlowDirection.LeftToRight;
 
-    internal string this[string key] => strings.TryGetValue(key, out var value)
+    public string this[string key] => strings.TryGetValue(key, out var value)
         ? value
         : throw new KeyNotFoundException($"Missing localization key '{key}' for {Culture.Name}.");
 
-    internal static void Initialize(App application, CultureInfo requestedCulture)
-    {
-        current = Load(ResolveCulture(requestedCulture));
-        CultureInfo.CurrentUICulture = current.Culture;
-        application.UseStringLocalizer(builder => Configure(builder, current.Culture));
-    }
+    internal static void Initialize(CultureInfo requestedCulture) => ApplyCulture(requestedCulture);
 
     internal static void ApplyCulture(CultureInfo culture)
     {
-        current = Load(ResolveCulture(culture));
+        var localized = Load(ResolveCulture(culture));
+        current.Culture = localized.Culture;
+        current.strings = localized.strings;
         CultureInfo.CurrentUICulture = current.Culture;
-        Application.Current.SetLocalizationCulture(current.Culture);
-    }
-
-    internal static void Configure(LocalizationBuilder builder, CultureInfo culture)
-    {
-        builder.SetCulture(culture);
-        foreach (var supportedCulture in SupportedCultures)
-        {
-            builder.AddLocalization(
-                supportedCulture,
-                Load(supportedCulture).strings.Select(value =>
-                    new KeyValuePair<string, string?>(value.Key, value.Value)));
-        }
+        current.PropertyChanged?.Invoke(current, new PropertyChangedEventArgs("Item[]"));
+        current.PropertyChanged?.Invoke(current, new PropertyChangedEventArgs(nameof(Culture)));
+        current.PropertyChanged?.Invoke(current, new PropertyChangedEventArgs(nameof(FlowDirection)));
     }
 
     internal static CultureInfo ResolveCulture(CultureInfo requestedCulture)

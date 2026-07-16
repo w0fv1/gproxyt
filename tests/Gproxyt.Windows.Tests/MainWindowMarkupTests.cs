@@ -30,7 +30,7 @@ public sealed class MainWindowMarkupTests
         var launchButton = FindLaunchButton(document);
         var hint = launchButton
             .ElementsAfterSelf(Presentation + "TextBlock")
-            .Single(element => (string?)element.Attribute("Text") == "{i18n:StringLocalizer LaunchHint}");
+            .Single(element => (string?)element.Attribute("Text") == "{Binding [LaunchHint], Source={x:Static local:AppLocalization.Current}}");
 
         Assert.Equal("{DynamicResource TextFillColorSecondaryBrush}", (string?)hint.Attribute("Foreground"));
     }
@@ -71,7 +71,7 @@ public sealed class MainWindowMarkupTests
             .Descendants(Presentation + "Border")
             .Single(element => (string?)element.Attribute(Xaml + "Name") == "SettingsPanel");
 
-        Assert.Equal("{i18n:StringLocalizer Language}", (string?)languageSelector.Attribute("AutomationProperties.Name"));
+        Assert.Equal("{Binding [Language], Source={x:Static local:AppLocalization.Current}}", (string?)languageSelector.Attribute("AutomationProperties.Name"));
         Assert.Equal("1", (string?)settingsPanel.Attribute("BorderThickness"));
         Assert.Equal("20", (string?)settingsPanel.Attribute("Padding"));
     }

@@ -43,7 +43,8 @@ public sealed partial class LocalizationResourcesTests
         Assert.DoesNotMatch(ChineseText(), markup);
         Assert.DoesNotContain("Title=\"gproxyt\"", markup, StringComparison.Ordinal);
         Assert.DoesNotContain("Text=\"Gproxyt\"", markup, StringComparison.Ordinal);
-        Assert.Contains("i18n:StringLocalizer", markup, StringComparison.Ordinal);
+        Assert.Contains("AppLocalization.Current", markup, StringComparison.Ordinal);
+        Assert.Contains("{Binding [", markup, StringComparison.Ordinal);
     }
 
     [Fact]

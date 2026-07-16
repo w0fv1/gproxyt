@@ -18,7 +18,7 @@ public partial class App : Application
         {
             var savedSettings = AppPaths.CreateSettingsStore().Load();
             var culture = AppLocalization.ResolveConfiguredCulture(savedSettings.CultureName, CultureInfo.CurrentUICulture);
-            AppLocalization.Initialize(this, culture);
+            AppLocalization.Initialize(culture);
             log = ApplicationLog.Create(options.Debug, Environment.CurrentDirectory);
             log.Information(
                 "application_started",
