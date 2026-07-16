@@ -35,6 +35,27 @@ public sealed class MainWindowMarkupTests
         Assert.Equal("{DynamicResource TextFillColorSecondaryBrush}", (string?)hint.Attribute("Foreground"));
     }
 
+    [Fact]
+    public void Brand_identity_is_split_between_the_header_lockup_and_content_title()
+    {
+        var document = LoadMarkup();
+        var headerBrandLogo = document
+            .Descendants(Presentation + "Image")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "HeaderBrandLogo");
+        var headerBrandTitle = document
+            .Descendants(Presentation + "TextBlock")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "HeaderBrandTitle");
+        var contentTitle = document
+            .Descendants(Presentation + "TextBlock")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "ContentTitle");
+
+        Assert.Equal("Assets/gproxyt.png", (string?)headerBrandLogo.Attribute("Source"));
+        Assert.Equal("18", (string?)headerBrandLogo.Attribute("Width"));
+        Assert.Equal("18", (string?)headerBrandLogo.Attribute("Height"));
+        Assert.Equal("Gproxyt", (string?)headerBrandTitle.Attribute("Text"));
+        Assert.Equal("Gproxyt", (string?)contentTitle.Attribute("Text"));
+    }
+
     private static XDocument LoadMarkup() => XDocument.Load(Path.Combine(AppContext.BaseDirectory, "MainWindow.xaml"));
 
     private static XElement FindLaunchButton(XDocument document) => document

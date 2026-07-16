@@ -43,6 +43,23 @@
         <Grid Grid.Row="0"
               Background="Transparent"
               MouseLeftButtonDown="DragWindow">
+            <StackPanel Margin="16,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        IsHitTestVisible="False"
+                        Orientation="Horizontal">
+                <Image x:Name="HeaderBrandLogo"
+                       Source="Assets/gproxyt.png"
+                       Width="18"
+                       Height="18"
+                       Stretch="Uniform" />
+                <TextBlock x:Name="HeaderBrandTitle"
+                           Margin="8,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Text="Gproxyt" />
+            </StackPanel>
             <StackPanel HorizontalAlignment="Right"
                         Orientation="Horizontal">
                 <Button Style="{StaticResource HeaderIconButtonStyle}"
@@ -67,7 +84,8 @@
         <StackPanel Grid.Row="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            <TextBlock Text="Gproxy"
+            <TextBlock x:Name="ContentTitle"
+                       Text="Gproxyt"
                        Margin="0,0,0,28"
                        HorizontalAlignment="Center"
                        FontSize="28"
