@@ -48,11 +48,15 @@
                         VerticalAlignment="Center"
                         IsHitTestVisible="False"
                         Orientation="Horizontal">
-                <Image x:Name="HeaderBrandLogo"
-                       Source="Assets/gproxyt.png"
-                       Width="18"
-                       Height="18"
-                       Stretch="Uniform" />
+                <Rectangle x:Name="HeaderBrandLogo"
+                           Width="18"
+                           Height="18"
+                           Fill="{DynamicResource TextFillColorPrimaryBrush}">
+                    <Rectangle.OpacityMask>
+                        <ImageBrush ImageSource="Assets/gproxyt.png"
+                                    Stretch="Uniform" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
                 <TextBlock x:Name="HeaderBrandTitle"
                            Margin="8,0,0,0"
                            VerticalAlignment="Center"

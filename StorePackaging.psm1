@@ -24,4 +24,28 @@ function Resolve-WinAppCli {
     return $command.Source
 }
 
-Export-ModuleMember -Function ConvertTo-GproxytStoreVersion, Resolve-WinAppCli
+function New-GproxytDarkThemeLogo {
+    param(
+        [Parameter(Mandatory)] [string] $SourcePath,
+        [Parameter(Mandatory)] [string] $OutputPath
+    )
+
+    Add-Type -AssemblyName System.Drawing
+    $source = New-Object System.Drawing.Bitmap ([IO.Path]::GetFullPath($SourcePath))
+    $output = New-Object System.Drawing.Bitmap $source.Width, $source.Height
+    try {
+        for ($y = 0; $y -lt $source.Height; $y++) {
+            for ($x = 0; $x -lt $source.Width; $x++) {
+                $alpha = $source.GetPixel($x, $y).A
+                $output.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($alpha, 255, 255, 255))
+            }
+        }
+        $output.Save([IO.Path]::GetFullPath($OutputPath), [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally {
+        $output.Dispose()
+        $source.Dispose()
+    }
+}
+
+Export-ModuleMember -Function ConvertTo-GproxytStoreVersion, Resolve-WinAppCli, New-GproxytDarkThemeLogo

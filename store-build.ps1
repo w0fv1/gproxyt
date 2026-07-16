@@ -25,6 +25,7 @@ $outputRoot = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
 }
 $stagingRoot = Join-Path $projectRoot "obj\Store\$([Guid]::NewGuid().ToString('N'))"
 $layoutPath = Join-Path $stagingRoot "layout"
+$darkThemeLogoPath = Join-Path $stagingRoot "gproxyt-dark-theme.png"
 $packagePath = Join-Path $outputRoot "GProxyT_$($packageVersion)_x64.msix"
 
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = "1"
@@ -54,7 +55,8 @@ try {
     $manifest = $manifest.Replace('Version="0.0.0.0"', "Version=`"$packageVersion`"")
     $manifestPath = Join-Path $layoutPath "Package.appxmanifest"
     Set-Content -LiteralPath $manifestPath -Value $manifest -Encoding UTF8 -NoNewline
-    & $winapp manifest update-assets $logoPath --manifest $manifestPath
+    New-GproxytDarkThemeLogo -SourcePath $logoPath -OutputPath $darkThemeLogoPath
+    & $winapp manifest update-assets $darkThemeLogoPath --light-image $logoPath --manifest $manifestPath
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
     }

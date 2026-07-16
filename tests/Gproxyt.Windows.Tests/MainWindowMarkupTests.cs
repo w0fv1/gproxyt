@@ -40,8 +40,11 @@ public sealed class MainWindowMarkupTests
     {
         var document = LoadMarkup();
         var headerBrandLogo = document
-            .Descendants(Presentation + "Image")
+            .Descendants(Presentation + "Rectangle")
             .Single(element => (string?)element.Attribute(Xaml + "Name") == "HeaderBrandLogo");
+        var logoMask = headerBrandLogo
+            .Descendants(Presentation + "ImageBrush")
+            .Single();
         var headerBrandTitle = document
             .Descendants(Presentation + "TextBlock")
             .Single(element => (string?)element.Attribute(Xaml + "Name") == "HeaderBrandTitle");
@@ -49,9 +52,10 @@ public sealed class MainWindowMarkupTests
             .Descendants(Presentation + "TextBlock")
             .Single(element => (string?)element.Attribute(Xaml + "Name") == "ContentTitle");
 
-        Assert.Equal("Assets/gproxyt.png", (string?)headerBrandLogo.Attribute("Source"));
         Assert.Equal("18", (string?)headerBrandLogo.Attribute("Width"));
         Assert.Equal("18", (string?)headerBrandLogo.Attribute("Height"));
+        Assert.Equal("{DynamicResource TextFillColorPrimaryBrush}", (string?)headerBrandLogo.Attribute("Fill"));
+        Assert.Equal("Assets/gproxyt.png", (string?)logoMask.Attribute("ImageSource"));
         Assert.Equal("Gproxyt", (string?)headerBrandTitle.Attribute("Text"));
         Assert.Equal("Gproxyt", (string?)contentTitle.Attribute("Text"));
     }
