@@ -4,6 +4,8 @@
   "Close": "Close",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "Enter a valid HTTP, HTTPS, or SOCKS5 proxy URL.",
+  "Language": "Display language",
+  "LanguageDescription": "Choose the language used by GProxyT",
   "LaunchChatGpt": "Open ChatGPT",
   "LaunchFailed": "GProxyT couldn't start ChatGPT. Check that ChatGPT and your proxy are available.",
   "LaunchHint": "Open ChatGPT through your proxy only.",

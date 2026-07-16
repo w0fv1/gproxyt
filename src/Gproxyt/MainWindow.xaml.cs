@@ -49,6 +49,11 @@ public partial class MainWindow : FluentWindow
                 try
                 {
                     settings = await runtime.SaveSettingsAsync(settingsWindow.Settings);
+                    AppLocalization.ApplyCulture(AppLocalization.ResolveConfiguredCulture(
+                        settings.CultureName,
+                        AppLocalization.Current.Culture));
+                    FlowDirection = AppLocalization.Current.FlowDirection;
+                    Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
                 }
                 catch (Exception)
                 {

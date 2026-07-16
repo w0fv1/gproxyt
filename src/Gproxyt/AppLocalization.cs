@@ -49,6 +49,13 @@ internal sealed class AppLocalization
         application.UseStringLocalizer(builder => Configure(builder, current.Culture));
     }
 
+    internal static void ApplyCulture(CultureInfo culture)
+    {
+        current = Load(ResolveCulture(culture));
+        CultureInfo.CurrentUICulture = current.Culture;
+        Application.Current.SetLocalizationCulture(current.Culture);
+    }
+
     internal static void Configure(LocalizationBuilder builder, CultureInfo culture)
     {
         builder.SetCulture(culture);
@@ -80,6 +87,15 @@ internal sealed class AppLocalization
         var languageMatch = SupportedCultures.FirstOrDefault(culture =>
             culture.TwoLetterISOLanguageName.Equals(requestedCulture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase));
         return languageMatch ?? CulturesByName["en-US"];
+    }
+
+    internal static CultureInfo ResolveConfiguredCulture(string? cultureName, CultureInfo systemCulture)
+    {
+        if (!string.IsNullOrWhiteSpace(cultureName) && CulturesByName.TryGetValue(cultureName, out var configured))
+        {
+            return configured;
+        }
+        return ResolveCulture(systemCulture);
     }
 
     private static AppLocalization Load(CultureInfo culture)

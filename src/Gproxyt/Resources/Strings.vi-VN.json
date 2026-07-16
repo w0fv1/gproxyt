@@ -4,6 +4,8 @@
   "Close": "Đóng",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "Nhập URL proxy HTTP, HTTPS hoặc SOCKS5 hợp lệ.",
+  "Language": "Ngôn ngữ hiển thị",
+  "LanguageDescription": "Chọn ngôn ngữ GProxyT sử dụng",
   "LaunchChatGpt": "Mở ChatGPT",
   "LaunchFailed": "GProxyT không thể khởi động ChatGPT. Hãy kiểm tra ChatGPT và proxy có sẵn sàng không.",
   "LaunchHint": "Chỉ mở ChatGPT qua proxy của bạn.",

@@ -60,6 +60,22 @@ public sealed class MainWindowMarkupTests
         Assert.Equal("GProxyT", (string?)contentTitle.Attribute("Text"));
     }
 
+    [Fact]
+    public void Settings_window_exposes_language_selection_inside_a_bordered_panel()
+    {
+        var document = XDocument.Load(Path.Combine(AppContext.BaseDirectory, "SettingsWindow.xaml"));
+        var languageSelector = document
+            .Descendants(Presentation + "ComboBox")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "LanguageComboBox");
+        var settingsPanel = document
+            .Descendants(Presentation + "Border")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "SettingsPanel");
+
+        Assert.Equal("{i18n:StringLocalizer Language}", (string?)languageSelector.Attribute("AutomationProperties.Name"));
+        Assert.Equal("1", (string?)settingsPanel.Attribute("BorderThickness"));
+        Assert.Equal("20", (string?)settingsPanel.Attribute("Padding"));
+    }
+
     private static XDocument LoadMarkup() => XDocument.Load(Path.Combine(AppContext.BaseDirectory, "MainWindow.xaml"));
 
     private static XElement FindLaunchButton(XDocument document) => document

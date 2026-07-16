@@ -4,6 +4,8 @@
   "Close": "Tutup",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "Masukkan URL proksi HTTP, HTTPS, atau SOCKS5 yang valid.",
+  "Language": "Bahasa tampilan",
+  "LanguageDescription": "Pilih bahasa yang digunakan GProxyT",
   "LaunchChatGpt": "Buka ChatGPT",
   "LaunchFailed": "GProxyT tidak dapat memulai ChatGPT. Pastikan ChatGPT dan proksi tersedia.",
   "LaunchHint": "Buka ChatGPT hanya melalui proksi Anda.",

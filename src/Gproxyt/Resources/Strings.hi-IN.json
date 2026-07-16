@@ -4,6 +4,8 @@
   "Close": "बंद करें",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "मान्य HTTP, HTTPS या SOCKS5 प्रॉक्सी URL दर्ज करें।",
+  "Language": "प्रदर्शन भाषा",
+  "LanguageDescription": "GProxyT में उपयोग की जाने वाली भाषा चुनें",
   "LaunchChatGpt": "ChatGPT खोलें",
   "LaunchFailed": "GProxyT ChatGPT शुरू नहीं कर सका। जाँचें कि ChatGPT और प्रॉक्सी उपलब्ध हैं।",
   "LaunchHint": "ChatGPT को केवल अपने प्रॉक्सी के माध्यम से खोलें।",

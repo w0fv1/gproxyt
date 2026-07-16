@@ -21,6 +21,10 @@ public partial class SettingsWindow : FluentWindow
         Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
         ProxyUrlTextBox.Text = settings.ProxyUrl;
         StartWithWindowsToggle.IsChecked = settings.StartWithWindows;
+        LanguageComboBox.ItemsSource = AppLocalization.SupportedCultures;
+        LanguageComboBox.SelectedValue = AppLocalization.ResolveConfiguredCulture(
+            settings.CultureName,
+            AppLocalization.Current.Culture).Name;
     }
 
     internal LauncherSettings Settings { get; private set; }
@@ -40,7 +44,8 @@ public partial class SettingsWindow : FluentWindow
             Settings = new LauncherSettings(
                 ProxyEndpoint.Parse(ProxyUrlTextBox.Text).Value,
                 currentSettings.RestartExisting,
-                StartWithWindowsToggle.IsChecked == true);
+                StartWithWindowsToggle.IsChecked == true,
+                ((System.Globalization.CultureInfo)LanguageComboBox.SelectedItem).Name);
             DialogResult = true;
         }
         catch (Exception)

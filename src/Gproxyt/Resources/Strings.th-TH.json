@@ -4,6 +4,8 @@
   "Close": "ปิด",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "ป้อน URL พร็อกซี HTTP, HTTPS หรือ SOCKS5 ที่ถูกต้อง",
+  "Language": "ภาษาที่แสดง",
+  "LanguageDescription": "เลือกภาษาที่ GProxyT ใช้",
   "LaunchChatGpt": "เปิด ChatGPT",
   "LaunchFailed": "GProxyT ไม่สามารถเริ่ม ChatGPT ได้ โปรดตรวจสอบว่า ChatGPT และพร็อกซีพร้อมใช้งาน",
   "LaunchHint": "เปิด ChatGPT ผ่านพร็อกซีของคุณเท่านั้น",

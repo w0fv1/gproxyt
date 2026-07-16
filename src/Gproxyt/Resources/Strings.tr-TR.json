@@ -4,6 +4,8 @@
   "Close": "Kapat",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "Geçerli bir HTTP, HTTPS veya SOCKS5 proxy URL'si girin.",
+  "Language": "Görüntüleme dili",
+  "LanguageDescription": "GProxyT tarafından kullanılan dili seçin",
   "LaunchChatGpt": "ChatGPT'yi aç",
   "LaunchFailed": "GProxyT, ChatGPT'yi başlatamadı. ChatGPT ve proxy'nin kullanılabilir olduğunu kontrol edin.",
   "LaunchHint": "ChatGPT'yi yalnızca proxy'niz üzerinden açın.",

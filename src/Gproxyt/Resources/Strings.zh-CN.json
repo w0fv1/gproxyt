@@ -4,6 +4,8 @@
   "Close": "关闭",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "请输入有效的 HTTP、HTTPS 或 SOCKS5 代理 URL。",
+  "Language": "界面语言",
+  "LanguageDescription": "选择 GProxyT 使用的显示语言",
   "LaunchChatGpt": "打开 ChatGPT",
   "LaunchFailed": "GProxyT 无法启动 ChatGPT，请确认 ChatGPT 和代理均可用。",
   "LaunchHint": "仅通过你的代理打开 ChatGPT。",

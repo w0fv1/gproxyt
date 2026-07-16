@@ -4,6 +4,8 @@
   "Close": "Закрити",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "Введіть правильну URL-адресу проксі HTTP, HTTPS або SOCKS5.",
+  "Language": "Мова інтерфейсу",
+  "LanguageDescription": "Виберіть мову, яку використовує GProxyT",
   "LaunchChatGpt": "Відкрити ChatGPT",
   "LaunchFailed": "GProxyT не вдалося запустити ChatGPT. Перевірте доступність ChatGPT і проксі.",
   "LaunchHint": "Відкривайте ChatGPT лише через свій проксі.",

@@ -18,7 +18,7 @@ public sealed class LauncherSettingsStoreTests : IDisposable
     public void Save_and_load_round_trip_settings()
     {
         var store = new LauncherSettingsStore(Path.Combine(directory, "settings.json"));
-        var expected = new LauncherSettings("socks5://127.0.0.1:7891", false, true);
+        var expected = new LauncherSettings("socks5://127.0.0.1:7891", false, true, "ja-JP");
 
         store.Save(expected);
 
@@ -34,6 +34,18 @@ public sealed class LauncherSettingsStoreTests : IDisposable
 
         Assert.Equal("http://127.0.0.1:7890", normalized.ProxyUrl);
         Assert.True(normalized.StartWithWindows);
+    }
+
+    [Fact]
+    public void Load_preserves_legacy_settings_without_a_culture()
+    {
+        Directory.CreateDirectory(directory);
+        var path = Path.Combine(directory, "settings.json");
+        File.WriteAllText(path, """{"proxyUrl":"http://127.0.0.1:7890","restartExisting":true,"startWithWindows":false}""");
+
+        var settings = new LauncherSettingsStore(path).Load();
+
+        Assert.Null(settings.CultureName);
     }
 
     public void Dispose()

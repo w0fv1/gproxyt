@@ -26,4 +26,13 @@ public sealed class AppLocalizationTests
     {
         Assert.Equal(expected, AppLocalization.ResolveCulture(new CultureInfo(requested)).Name);
     }
+
+    [Theory]
+    [InlineData("ja-JP", "en-US", "ja-JP")]
+    [InlineData(null, "zh-SG", "zh-CN")]
+    [InlineData("invalid", "de-AT", "de-DE")]
+    public void Resolves_a_saved_culture_with_system_fallback(string? saved, string system, string expected)
+    {
+        Assert.Equal(expected, AppLocalization.ResolveConfiguredCulture(saved, new CultureInfo(system)).Name);
+    }
 }

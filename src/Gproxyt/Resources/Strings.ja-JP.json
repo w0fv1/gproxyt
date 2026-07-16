@@ -4,6 +4,8 @@
   "Close": "閉じる",
   "FlowDirection": "LeftToRight",
   "InvalidProxySettings": "有効な HTTP、HTTPS、または SOCKS5 プロキシ URL を入力してください。",
+  "Language": "表示言語",
+  "LanguageDescription": "GProxyT で使用する言語を選択します",
   "LaunchChatGpt": "ChatGPT を開く",
   "LaunchFailed": "GProxyT は ChatGPT を起動できませんでした。ChatGPT とプロキシが利用可能か確認してください。",
   "LaunchHint": "ChatGPT のみをプロキシ経由で開きます。",

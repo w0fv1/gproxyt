@@ -6,7 +6,7 @@
                  Title="{i18n:StringLocalizer Settings}"
                  Width="420"
                  MinWidth="360"
-                 Height="430"
+                 Height="540"
                  ResizeMode="NoResize"
                  WindowStyle="None"
                  ExtendsContentIntoTitleBar="True"
@@ -37,12 +37,21 @@
             </Button>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="24,16,24,22">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Border x:Name="SettingsPanel"
+                Grid.Row="1"
+                Margin="16,8,16,16"
+                Padding="20"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0,0,0,24">
                 <TextBlock FontSize="14"
@@ -60,7 +69,7 @@
                             VerticalContentAlignment="Center" />
             </StackPanel>
 
-            <StackPanel Grid.Row="1">
+            <StackPanel Grid.Row="1" Margin="0,0,0,24">
                 <TextBlock FontSize="14"
                            FontWeight="SemiBold"
                            Text="{i18n:StringLocalizer StartWithWindows}" />
@@ -76,7 +85,24 @@
                                  AutomationProperties.Name="{i18n:StringLocalizer StartWithWindows}" />
             </StackPanel>
 
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2">
+                <TextBlock FontSize="14"
+                           FontWeight="SemiBold"
+                           Text="{i18n:StringLocalizer Language}" />
+                <TextBlock Margin="0,4,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           FontSize="12"
+                           Text="{i18n:StringLocalizer LanguageDescription}"
+                           TextWrapping="Wrap" />
+                <ComboBox x:Name="LanguageComboBox"
+                          Height="38"
+                          Margin="0,10,0,0"
+                          AutomationProperties.Name="{i18n:StringLocalizer Language}"
+                          DisplayMemberPath="NativeName"
+                          SelectedValuePath="Name" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="3"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         Orientation="Horizontal">
@@ -92,6 +118,7 @@
                            Content="{i18n:StringLocalizer Save}"
                            Click="Save" />
             </StackPanel>
-        </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </ui:FluentWindow>

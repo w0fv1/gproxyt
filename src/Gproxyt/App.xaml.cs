@@ -13,10 +13,12 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs eventArgs)
     {
         base.OnStartup(eventArgs);
-        AppLocalization.Initialize(this, CultureInfo.CurrentUICulture);
         var options = ApplicationOptions.Parse(eventArgs.Args);
         try
         {
+            var savedSettings = AppPaths.CreateSettingsStore().Load();
+            var culture = AppLocalization.ResolveConfiguredCulture(savedSettings.CultureName, CultureInfo.CurrentUICulture);
+            AppLocalization.Initialize(this, culture);
             log = ApplicationLog.Create(options.Debug, Environment.CurrentDirectory);
             log.Information(
                 "application_started",

@@ -1,8 +1,8 @@
 namespace Gproxyt.Core;
 
-public sealed record LauncherSettings(string ProxyUrl, bool RestartExisting, bool StartWithWindows)
+public sealed record LauncherSettings(string ProxyUrl, bool RestartExisting, bool StartWithWindows, string? CultureName = null)
 {
-    public static LauncherSettings Default { get; } = new("http://127.0.0.1:7890", true, false);
+    public static LauncherSettings Default { get; } = new("http://127.0.0.1:7890", true, false, null);
 
     public LauncherSettings Normalize() => this with { ProxyUrl = ProxyEndpoint.Parse(ProxyUrl).Value };
 }
