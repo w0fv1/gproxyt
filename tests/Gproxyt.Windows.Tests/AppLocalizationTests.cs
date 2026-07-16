@@ -1,9 +1,21 @@
 using System.Globalization;
+using Lepo.i18n;
 
 namespace Gproxyt.Windows.Tests;
 
 public sealed class AppLocalizationTests
 {
+    [Fact]
+    public void Loads_every_embedded_translation_into_the_localization_provider()
+    {
+        var builder = new LocalizationBuilder();
+
+        AppLocalization.Configure(builder, new CultureInfo("zh-CN"));
+        var provider = builder.Build();
+
+        Assert.Equal("zh-CN", provider.GetCulture().Name);
+    }
+
     [Theory]
     [InlineData("de-AT", "de-DE")]
     [InlineData("zh-HK", "zh-TW")]

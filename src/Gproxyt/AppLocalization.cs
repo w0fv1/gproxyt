@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Windows;
-using Lepo.i18n.Json;
+using Lepo.i18n;
 using Lepo.i18n.Wpf;
 
 namespace Gproxyt;
@@ -46,14 +46,19 @@ internal sealed class AppLocalization
     {
         current = Load(ResolveCulture(requestedCulture));
         CultureInfo.CurrentUICulture = current.Culture;
-        application.UseStringLocalizer(builder =>
+        application.UseStringLocalizer(builder => Configure(builder, current.Culture));
+    }
+
+    internal static void Configure(LocalizationBuilder builder, CultureInfo culture)
+    {
+        builder.SetCulture(culture);
+        foreach (var supportedCulture in SupportedCultures)
         {
-            builder.SetCulture(current.Culture);
-            foreach (var culture in SupportedCultures)
-            {
-                builder.FromJson(Assembly, ResourceName(culture), culture);
-            }
-        });
+            builder.AddLocalization(
+                supportedCulture,
+                Load(supportedCulture).strings.Select(value =>
+                    new KeyValuePair<string, string?>(value.Key, value.Value)));
+        }
     }
 
     internal static CultureInfo ResolveCulture(CultureInfo requestedCulture)
