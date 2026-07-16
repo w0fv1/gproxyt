@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "Batal",
+  "Close": "Tutup",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "Masukkan URL proksi HTTP, HTTPS, atau SOCKS5 yang valid.",
+  "LaunchChatGpt": "Buka ChatGPT",
+  "LaunchFailed": "GProxyT tidak dapat memulai ChatGPT. Pastikan ChatGPT dan proksi tersedia.",
+  "LaunchHint": "Buka ChatGPT hanya melalui proksi Anda.",
+  "Minimize": "Minimalkan",
+  "ProxyUrl": "URL proksi",
+  "ProxyUrlDescription": "Alamat proksi yang digunakan ChatGPT",
+  "Save": "Simpan",
+  "Settings": "Pengaturan",
+  "SettingsSaveFailed": "GProxyT tidak dapat menyimpan pengaturan. Periksa alamat proksi dan coba lagi.",
+  "StartWithWindows": "Mulai bersama Windows",
+  "StartWithWindowsDescription": "Buka ChatGPT otomatis setelah masuk ke Windows",
+  "StartupFailed": "GProxyT tidak dapat dimulai. Mulai ulang atau instal ulang aplikasi."
+}

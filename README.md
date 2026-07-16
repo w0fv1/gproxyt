@@ -1,6 +1,6 @@
-# gproxyt
+# GProxyT
 
-`gproxyt` 是 Windows ChatGPT 桌面应用的独立代理启动器。它不修改 Windows 系统代理，通过 Windows 程序包身份启动 ChatGPT，并为 Chromium 网络栈传入代理参数。
+GProxyT 是 Windows ChatGPT 桌面应用的独立代理启动器。它不修改 Windows 系统代理，通过 Windows 程序包身份启动 ChatGPT，并为 Chromium 网络栈传入代理参数。
 
 默认代理：
 
@@ -14,7 +14,7 @@ http://127.0.0.1:7890
 - Microsoft Store 当前版 ChatGPT/Codex 统一桌面应用
 - 本地 Clash HTTP 或 mixed 代理端口
 
-不需要管理员权限。gproxyt 通过 Windows 程序包身份和 AUMID 激活官方应用，不直接执行受保护的 `WindowsApps` 文件。
+不需要管理员权限。GProxyT 通过 Windows 程序包身份和 AUMID 激活官方应用，不直接执行受保护的 `WindowsApps` 文件。
 
 官方应用可以使用以下命令安装：
 
@@ -26,7 +26,7 @@ winget install Codex -s msstore
 
 运行 `gproxyt.exe`，点击窗口中央的启动按钮。
 
-普通窗口模式为当前 Windows 会话单实例。再次运行时不会创建第二个窗口，而是还原并置前已经打开的 gproxyt。
+普通窗口模式为当前 Windows 会话单实例。再次运行时不会创建第二个窗口，而是还原并置前已经打开的 GProxyT。
 
 右上角设置按钮可以修改代理 URL 和开机自启。开机自启只写入当前用户的 Windows Run 项，并使用 `--launch` 直接通过代理启动 ChatGPT。
 
@@ -72,6 +72,8 @@ dist\gproxyt.exe
 
 Microsoft Store 使用与独立版本相同的源码、版本和图像资源生成 x64 MSIX。项目版本 `x.y.z-label` 自动映射为商店版本 `x.y.z.0`，商店身份固定为 `LaiqiInfo.GProxyT`。
 
+产品标识、Partner Center 提交记录、商店链接和发布配置统一维护在 [`packaging/microsoft-store.md`](packaging/microsoft-store.md)。
+
 安装 Windows App Development CLI：
 
 ```powershell
@@ -91,6 +93,16 @@ dist\store\GProxyT_<version>_x64.msix
 ```
 
 商店版使用 Windows 程序包启动任务实现开机自启，独立版本继续使用当前用户的 Windows Run 项。程序包升级不会依赖版本化的安装路径。
+
+## 国际化
+
+GProxyT 默认跟随 Windows 显示语言，不支持的语言自动回退到英语。界面、无障碍名称和用户错误提示共享同一组嵌入式本地化资源。
+
+当前支持简体中文、繁体中文、英语、西班牙语、法语、德语、日语、韩语、巴西葡萄牙语、俄语、阿拉伯语、印地语、意大利语、荷兰语、土耳其语、波兰语、印尼语、越南语、泰语和乌克兰语。阿拉伯语使用从右到左布局。
+
+所有语言资源位于 `src/Gproxyt/Resources/Strings.<culture>.json`。英语 `en-US` 是回退语言；新增文本时必须同步更新全部语言文件，测试会校验键集合一致。
+
+i18n 运行库的许可证声明见 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md)。
 
 ## 发布
 

@@ -30,7 +30,7 @@ public sealed class MainWindowMarkupTests
         var launchButton = FindLaunchButton(document);
         var hint = launchButton
             .ElementsAfterSelf(Presentation + "TextBlock")
-            .Single(element => (string?)element.Attribute("Text") == "单独使用代理打开你的 ChatGPT。");
+            .Single(element => (string?)element.Attribute("Text") == "{i18n:StringLocalizer LaunchHint}");
 
         Assert.Equal("{DynamicResource TextFillColorSecondaryBrush}", (string?)hint.Attribute("Foreground"));
     }
@@ -56,8 +56,8 @@ public sealed class MainWindowMarkupTests
         Assert.Equal("18", (string?)headerBrandLogo.Attribute("Height"));
         Assert.Equal("{DynamicResource TextFillColorPrimaryBrush}", (string?)headerBrandLogo.Attribute("Fill"));
         Assert.Equal("Assets/gproxyt.png", (string?)logoMask.Attribute("ImageSource"));
-        Assert.Equal("Gproxyt", (string?)headerBrandTitle.Attribute("Text"));
-        Assert.Equal("Gproxyt", (string?)contentTitle.Attribute("Text"));
+        Assert.Equal("GProxyT", (string?)headerBrandTitle.Attribute("Text"));
+        Assert.Equal("GProxyT", (string?)contentTitle.Attribute("Text"));
     }
 
     private static XDocument LoadMarkup() => XDocument.Load(Path.Combine(AppContext.BaseDirectory, "MainWindow.xaml"));

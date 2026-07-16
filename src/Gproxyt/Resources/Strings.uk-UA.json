@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "Скасувати",
+  "Close": "Закрити",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "Введіть правильну URL-адресу проксі HTTP, HTTPS або SOCKS5.",
+  "LaunchChatGpt": "Відкрити ChatGPT",
+  "LaunchFailed": "GProxyT не вдалося запустити ChatGPT. Перевірте доступність ChatGPT і проксі.",
+  "LaunchHint": "Відкривайте ChatGPT лише через свій проксі.",
+  "Minimize": "Згорнути",
+  "ProxyUrl": "URL-адреса проксі",
+  "ProxyUrlDescription": "Адреса проксі, яку використовує ChatGPT",
+  "Save": "Зберегти",
+  "Settings": "Налаштування",
+  "SettingsSaveFailed": "GProxyT не вдалося зберегти налаштування. Перевірте адресу проксі та повторіть спробу.",
+  "StartWithWindows": "Запускати з Windows",
+  "StartWithWindowsDescription": "Автоматично відкривати ChatGPT після входу в Windows",
+  "StartupFailed": "GProxyT не вдалося запустити. Перезапустіть або перевстановіть програму."
+}

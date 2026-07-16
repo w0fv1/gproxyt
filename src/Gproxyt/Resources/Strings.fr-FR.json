@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "Annuler",
+  "Close": "Fermer",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "Saisissez une URL de proxy HTTP, HTTPS ou SOCKS5 valide.",
+  "LaunchChatGpt": "Ouvrir ChatGPT",
+  "LaunchFailed": "GProxyT n’a pas pu démarrer ChatGPT. Vérifiez que ChatGPT et le proxy sont disponibles.",
+  "LaunchHint": "Ouvrez ChatGPT uniquement via votre proxy.",
+  "Minimize": "Réduire",
+  "ProxyUrl": "URL du proxy",
+  "ProxyUrlDescription": "Adresse de proxy utilisée par ChatGPT",
+  "Save": "Enregistrer",
+  "Settings": "Paramètres",
+  "SettingsSaveFailed": "GProxyT n’a pas pu enregistrer les paramètres. Vérifiez l’adresse du proxy et réessayez.",
+  "StartWithWindows": "Démarrer avec Windows",
+  "StartWithWindowsDescription": "Ouvrir automatiquement ChatGPT après la connexion à Windows",
+  "StartupFailed": "GProxyT n’a pas pu démarrer. Redémarrez l’application ou réinstallez-la."
+}

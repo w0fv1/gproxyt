@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Markup;
 using Gproxyt.Core;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -19,6 +20,8 @@ public partial class MainWindow : FluentWindow
         this.runtime = runtime;
         settings = runtime.LoadSettings();
         InitializeComponent();
+        FlowDirection = AppLocalization.Current.FlowDirection;
+        Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
         SystemThemeWatcher.Watch(this);
     }
 
@@ -47,9 +50,9 @@ public partial class MainWindow : FluentWindow
                 {
                     settings = await runtime.SaveSettingsAsync(settingsWindow.Settings);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    MessageBox.Show(this, exception.Message, "gproxyt", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(this, AppLocalization.Current["SettingsSaveFailed"], "GProxyT", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -75,9 +78,9 @@ public partial class MainWindow : FluentWindow
             LaunchProgressRing.Visibility = Visibility.Visible;
             await runtime.LaunchAsync(settings);
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            MessageBox.Show(this, exception.Message, "gproxyt", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, AppLocalization.Current["LaunchFailed"], "GProxyT", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {

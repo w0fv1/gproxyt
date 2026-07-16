@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "إلغاء",
+  "Close": "إغلاق",
+  "FlowDirection": "RightToLeft",
+  "InvalidProxySettings": "أدخل عنوان وكيل HTTP أو HTTPS أو SOCKS5 صالحًا.",
+  "LaunchChatGpt": "فتح ChatGPT",
+  "LaunchFailed": "تعذر على GProxyT تشغيل ChatGPT. تأكد من توفر ChatGPT والوكيل.",
+  "LaunchHint": "افتح ChatGPT عبر وكيلك فقط.",
+  "Minimize": "تصغير",
+  "ProxyUrl": "عنوان URL للوكيل",
+  "ProxyUrlDescription": "عنوان الوكيل الذي يستخدمه ChatGPT",
+  "Save": "حفظ",
+  "Settings": "الإعدادات",
+  "SettingsSaveFailed": "تعذر على GProxyT حفظ الإعدادات. تحقق من عنوان الوكيل وحاول مرة أخرى.",
+  "StartWithWindows": "التشغيل مع Windows",
+  "StartWithWindowsDescription": "فتح ChatGPT تلقائيًا بعد تسجيل الدخول إلى Windows",
+  "StartupFailed": "تعذر تشغيل GProxyT. أعد تشغيل التطبيق أو ثبّته من جديد."
+}

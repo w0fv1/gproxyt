@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "İptal",
+  "Close": "Kapat",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "Geçerli bir HTTP, HTTPS veya SOCKS5 proxy URL'si girin.",
+  "LaunchChatGpt": "ChatGPT'yi aç",
+  "LaunchFailed": "GProxyT, ChatGPT'yi başlatamadı. ChatGPT ve proxy'nin kullanılabilir olduğunu kontrol edin.",
+  "LaunchHint": "ChatGPT'yi yalnızca proxy'niz üzerinden açın.",
+  "Minimize": "Simge durumuna küçült",
+  "ProxyUrl": "Proxy URL'si",
+  "ProxyUrlDescription": "ChatGPT tarafından kullanılan proxy adresi",
+  "Save": "Kaydet",
+  "Settings": "Ayarlar",
+  "SettingsSaveFailed": "GProxyT ayarları kaydedemedi. Proxy adresini kontrol edip yeniden deneyin.",
+  "StartWithWindows": "Windows ile başlat",
+  "StartWithWindowsDescription": "Windows'ta oturum açtıktan sonra ChatGPT'yi otomatik olarak aç",
+  "StartupFailed": "GProxyT başlatılamadı. Uygulamayı yeniden başlatın veya yeniden yükleyin."
+}

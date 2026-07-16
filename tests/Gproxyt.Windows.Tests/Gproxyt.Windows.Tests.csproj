@@ -16,5 +16,11 @@
     <Content Include="..\..\src\Gproxyt\MainWindow.xaml"
              Link="MainWindow.xaml"
              CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\src\Gproxyt\SettingsWindow.xaml"
+             Link="SettingsWindow.xaml"
+             CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\src\Gproxyt\Resources\Strings.*.json"
+             Link="Resources\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

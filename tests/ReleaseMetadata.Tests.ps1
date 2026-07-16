@@ -18,16 +18,16 @@ Describe "gproxyt release metadata" {
 
     It "derives the README version front matter from the project version" {
         $readmePath = Join-Path $TestDrive "README.md"
-        Set-Content -Path $readmePath -Value "# gproxyt" -Encoding UTF8
+        Set-Content -Path $readmePath -Value "# GProxyT" -Encoding UTF8
 
         $readme = New-GproxytReleaseReadme -ReadmePath $readmePath -Version "1.0.1-stable"
 
-        $readme | Should Match "(?s)\A---\r?\nversion: 1\.0\.1-stable\r?\n---\r?\n\r?\n# gproxyt\z"
+        $readme | Should Match "(?s)\A---\r?\nversion: 1\.0\.1-stable\r?\n---\r?\n\r?\n# GProxyT\z"
     }
 
     It "rejects a second README version source" {
         $readmePath = Join-Path $TestDrive "README.md"
-        Set-Content -Path $readmePath -Value "---`nversion: 1.0.0-stable`n---`n# gproxyt" -Encoding UTF8
+        Set-Content -Path $readmePath -Value "---`nversion: 1.0.0-stable`n---`n# GProxyT" -Encoding UTF8
 
         $message = ""
         try {

@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "取消",
+  "Close": "关闭",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "请输入有效的 HTTP、HTTPS 或 SOCKS5 代理 URL。",
+  "LaunchChatGpt": "打开 ChatGPT",
+  "LaunchFailed": "GProxyT 无法启动 ChatGPT，请确认 ChatGPT 和代理均可用。",
+  "LaunchHint": "仅通过你的代理打开 ChatGPT。",
+  "Minimize": "最小化",
+  "ProxyUrl": "代理 URL",
+  "ProxyUrlDescription": "ChatGPT 使用的代理地址",
+  "Save": "保存",
+  "Settings": "设置",
+  "SettingsSaveFailed": "GProxyT 无法保存设置，请检查代理地址后重试。",
+  "StartWithWindows": "开机自启",
+  "StartWithWindowsDescription": "登录 Windows 后自动打开 ChatGPT",
+  "StartupFailed": "GProxyT 无法启动，请重启应用或重新安装。"
+}

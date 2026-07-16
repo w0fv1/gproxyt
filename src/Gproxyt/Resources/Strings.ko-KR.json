@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "취소",
+  "Close": "닫기",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "올바른 HTTP, HTTPS 또는 SOCKS5 프록시 URL을 입력하세요.",
+  "LaunchChatGpt": "ChatGPT 열기",
+  "LaunchFailed": "GProxyT에서 ChatGPT를 시작하지 못했습니다. ChatGPT와 프록시를 사용할 수 있는지 확인하세요.",
+  "LaunchHint": "ChatGPT만 프록시를 통해 엽니다.",
+  "Minimize": "최소화",
+  "ProxyUrl": "프록시 URL",
+  "ProxyUrlDescription": "ChatGPT에서 사용할 프록시 주소",
+  "Save": "저장",
+  "Settings": "설정",
+  "SettingsSaveFailed": "GProxyT에서 설정을 저장하지 못했습니다. 프록시 주소를 확인하고 다시 시도하세요.",
+  "StartWithWindows": "Windows 시작 시 실행",
+  "StartWithWindowsDescription": "Windows 로그인 후 ChatGPT 자동 열기",
+  "StartupFailed": "GProxyT를 시작하지 못했습니다. 앱을 다시 시작하거나 재설치하세요."
+}

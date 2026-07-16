@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "रद्द करें",
+  "Close": "बंद करें",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "मान्य HTTP, HTTPS या SOCKS5 प्रॉक्सी URL दर्ज करें।",
+  "LaunchChatGpt": "ChatGPT खोलें",
+  "LaunchFailed": "GProxyT ChatGPT शुरू नहीं कर सका। जाँचें कि ChatGPT और प्रॉक्सी उपलब्ध हैं।",
+  "LaunchHint": "ChatGPT को केवल अपने प्रॉक्सी के माध्यम से खोलें।",
+  "Minimize": "छोटा करें",
+  "ProxyUrl": "प्रॉक्सी URL",
+  "ProxyUrlDescription": "ChatGPT द्वारा उपयोग किया जाने वाला प्रॉक्सी पता",
+  "Save": "सहेजें",
+  "Settings": "सेटिंग्स",
+  "SettingsSaveFailed": "GProxyT सेटिंग्स सहेज नहीं सका। प्रॉक्सी पता जाँचें और फिर प्रयास करें।",
+  "StartWithWindows": "Windows के साथ शुरू करें",
+  "StartWithWindowsDescription": "Windows में साइन इन करने के बाद ChatGPT अपने आप खोलें",
+  "StartupFailed": "GProxyT शुरू नहीं हो सका। ऐप पुनः शुरू करें या दोबारा इंस्टॉल करें।"
+}

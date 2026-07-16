@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Markup;
 using Gproxyt.Core;
 using Wpf.Ui.Controls;
 using MessageBox = System.Windows.MessageBox;
@@ -16,6 +17,8 @@ public partial class SettingsWindow : FluentWindow
         currentSettings = settings;
         Settings = settings;
         InitializeComponent();
+        FlowDirection = AppLocalization.Current.FlowDirection;
+        Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
         ProxyUrlTextBox.Text = settings.ProxyUrl;
         StartWithWindowsToggle.IsChecked = settings.StartWithWindows;
     }
@@ -40,9 +43,9 @@ public partial class SettingsWindow : FluentWindow
                 StartWithWindowsToggle.IsChecked == true);
             DialogResult = true;
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            MessageBox.Show(this, exception.Message, "gproxyt", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, AppLocalization.Current["InvalidProxySettings"], "GProxyT", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

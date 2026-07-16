@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Globalization;
 using Wpf.Ui.Appearance;
 
 namespace Gproxyt;
@@ -12,6 +13,7 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs eventArgs)
     {
         base.OnStartup(eventArgs);
+        AppLocalization.Initialize(this, CultureInfo.CurrentUICulture);
         var options = ApplicationOptions.Parse(eventArgs.Args);
         try
         {
@@ -83,7 +85,7 @@ public partial class App : Application
         catch (Exception exception)
         {
             log.Error(exception, "application_failed");
-            MessageBox.Show(exception.Message, "gproxyt", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(AppLocalization.Current["StartupFailed"], "GProxyT", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(1);
         }
     }

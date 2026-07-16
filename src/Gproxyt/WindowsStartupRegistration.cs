@@ -12,7 +12,7 @@ internal sealed class WindowsStartupRegistration : IStartupRegistration
         using var key = Registry.CurrentUser.CreateSubKey(RunKeyPath, true);
         if (enabled)
         {
-            var executablePath = Environment.ProcessPath ?? throw new InvalidOperationException("无法确定 gproxyt 可执行文件位置。");
+            var executablePath = Environment.ProcessPath ?? throw new InvalidOperationException("无法确定 GProxyT 可执行文件位置。");
             key.SetValue(ValueName, $"\"{executablePath}\" --launch", RegistryValueKind.String);
         }
         else

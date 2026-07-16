@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "取消",
+  "Close": "關閉",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "請輸入有效的 HTTP、HTTPS 或 SOCKS5 Proxy URL。",
+  "LaunchChatGpt": "開啟 ChatGPT",
+  "LaunchFailed": "GProxyT 無法啟動 ChatGPT，請確認 ChatGPT 與 Proxy 均可使用。",
+  "LaunchHint": "僅透過你的 Proxy 開啟 ChatGPT。",
+  "Minimize": "最小化",
+  "ProxyUrl": "Proxy URL",
+  "ProxyUrlDescription": "ChatGPT 使用的 Proxy 位址",
+  "Save": "儲存",
+  "Settings": "設定",
+  "SettingsSaveFailed": "GProxyT 無法儲存設定，請檢查 Proxy 位址後再試一次。",
+  "StartWithWindows": "隨 Windows 啟動",
+  "StartWithWindowsDescription": "登入 Windows 後自動開啟 ChatGPT",
+  "StartupFailed": "GProxyT 無法啟動，請重新啟動應用程式或重新安裝。"
+}

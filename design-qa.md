@@ -14,7 +14,7 @@
 - Spacing and layout rhythm: the 46px header, 16px left inset, 18px logo, 8px lockup gap, centered content group, and existing action spacing are balanced at the target viewport.
 - Colors and visual tokens: the existing light Mica surface, dark text, secondary helper text, and accent launch surface remain unchanged.
 - Image quality and asset fidelity: the supplied transparent PNG is used directly for the header logo and preserves crisp edges without distortion or halos.
-- Copy and content: both titles read `Gproxyt`; helper text remains `单独使用代理打开你的 ChatGPT。`.
+- Copy and content: both titles read `GProxyT`; helper text is loaded from the active locale.
 
 **Open Questions**
 

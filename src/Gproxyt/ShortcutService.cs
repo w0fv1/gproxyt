@@ -6,7 +6,7 @@ internal static class ShortcutService
 {
     public static string Create(string iconPath)
     {
-        var executablePath = Environment.ProcessPath ?? throw new InvalidOperationException("无法确定 gproxyt 可执行文件位置。");
+        var executablePath = Environment.ProcessPath ?? throw new InvalidOperationException("无法确定 GProxyT 可执行文件位置。");
         var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         var shortcutPath = Path.Combine(desktop, "ChatGPT Proxy.lnk");
         var shellType = Type.GetTypeFromProgID("WScript.Shell") ?? throw new InvalidOperationException("Windows 快捷方式服务不可用。");

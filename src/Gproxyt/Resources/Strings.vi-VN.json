@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "Hủy",
+  "Close": "Đóng",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "Nhập URL proxy HTTP, HTTPS hoặc SOCKS5 hợp lệ.",
+  "LaunchChatGpt": "Mở ChatGPT",
+  "LaunchFailed": "GProxyT không thể khởi động ChatGPT. Hãy kiểm tra ChatGPT và proxy có sẵn sàng không.",
+  "LaunchHint": "Chỉ mở ChatGPT qua proxy của bạn.",
+  "Minimize": "Thu nhỏ",
+  "ProxyUrl": "URL proxy",
+  "ProxyUrlDescription": "Địa chỉ proxy mà ChatGPT sử dụng",
+  "Save": "Lưu",
+  "Settings": "Cài đặt",
+  "SettingsSaveFailed": "GProxyT không thể lưu cài đặt. Hãy kiểm tra địa chỉ proxy rồi thử lại.",
+  "StartWithWindows": "Khởi động cùng Windows",
+  "StartWithWindowsDescription": "Tự động mở ChatGPT sau khi đăng nhập Windows",
+  "StartupFailed": "GProxyT không thể khởi động. Hãy khởi động lại hoặc cài đặt lại ứng dụng."
+}

@@ -1,0 +1,19 @@
+{
+  "AppName": "GProxyT",
+  "Cancel": "キャンセル",
+  "Close": "閉じる",
+  "FlowDirection": "LeftToRight",
+  "InvalidProxySettings": "有効な HTTP、HTTPS、または SOCKS5 プロキシ URL を入力してください。",
+  "LaunchChatGpt": "ChatGPT を開く",
+  "LaunchFailed": "GProxyT は ChatGPT を起動できませんでした。ChatGPT とプロキシが利用可能か確認してください。",
+  "LaunchHint": "ChatGPT のみをプロキシ経由で開きます。",
+  "Minimize": "最小化",
+  "ProxyUrl": "プロキシ URL",
+  "ProxyUrlDescription": "ChatGPT が使用するプロキシアドレス",
+  "Save": "保存",
+  "Settings": "設定",
+  "SettingsSaveFailed": "GProxyT は設定を保存できませんでした。プロキシアドレスを確認して再試行してください。",
+  "StartWithWindows": "Windows と同時に起動",
+  "StartWithWindowsDescription": "Windows へのサインイン後に ChatGPT を自動的に開く",
+  "StartupFailed": "GProxyT を起動できませんでした。アプリを再起動するか再インストールしてください。"
+}
