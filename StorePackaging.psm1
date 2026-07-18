@@ -24,28 +24,50 @@ function Resolve-WinAppCli {
     return $command.Source
 }
 
-function New-GproxytDarkThemeLogo {
+function Set-GproxytManifestLanguages {
     param(
-        [Parameter(Mandatory)] [string] $SourcePath,
-        [Parameter(Mandatory)] [string] $OutputPath
+        [Parameter(Mandatory)] [string] $ManifestPath,
+        [Parameter(Mandatory)] [string] $ResourcesPath
     )
 
-    Add-Type -AssemblyName System.Drawing
-    $source = New-Object System.Drawing.Bitmap ([IO.Path]::GetFullPath($SourcePath))
-    $output = New-Object System.Drawing.Bitmap $source.Width, $source.Height
+    $resolvedManifestPath = [IO.Path]::GetFullPath($ManifestPath)
+    $resolvedResourcesPath = [IO.Path]::GetFullPath($ResourcesPath)
+    $cultures = @(Get-ChildItem -LiteralPath $resolvedResourcesPath -Filter "Strings.*.json" -File |
+        ForEach-Object { $_.BaseName.Substring("Strings.".Length) } |
+        Sort-Object -Unique)
+    if ($cultures.Count -eq 0) {
+        throw "At least one localization resource is required"
+    }
+    if ($cultures -notcontains "en-US") {
+        throw "The English fallback localization resource is required"
+    }
+    foreach ($culture in $cultures) {
+        [Globalization.CultureInfo]::GetCultureInfo($culture) | Out-Null
+    }
+
+    [xml] $manifest = Get-Content -Raw -Encoding UTF8 -LiteralPath $resolvedManifestPath
+    $resources = $manifest.Package.Resources
+    if ($null -eq $resources) {
+        throw "Package manifest must contain a Resources element"
+    }
+    $resources.RemoveAll()
+    foreach ($culture in $cultures) {
+        $resource = $manifest.CreateElement("Resource", $manifest.Package.NamespaceURI)
+        $resource.SetAttribute("Language", $culture)
+        $resources.AppendChild($resource) | Out-Null
+    }
+
+    $settings = New-Object Xml.XmlWriterSettings
+    $settings.Encoding = New-Object Text.UTF8Encoding $false
+    $settings.Indent = $true
+    $settings.OmitXmlDeclaration = $false
+    $writer = [Xml.XmlWriter]::Create($resolvedManifestPath, $settings)
     try {
-        for ($y = 0; $y -lt $source.Height; $y++) {
-            for ($x = 0; $x -lt $source.Width; $x++) {
-                $alpha = $source.GetPixel($x, $y).A
-                $output.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($alpha, 255, 255, 255))
-            }
-        }
-        $output.Save([IO.Path]::GetFullPath($OutputPath), [System.Drawing.Imaging.ImageFormat]::Png)
+        $manifest.Save($writer)
     }
     finally {
-        $output.Dispose()
-        $source.Dispose()
+        $writer.Dispose()
     }
 }
 
-Export-ModuleMember -Function ConvertTo-GproxytStoreVersion, Resolve-WinAppCli, New-GproxytDarkThemeLogo
+Export-ModuleMember -Function ConvertTo-GproxytStoreVersion, Resolve-WinAppCli, Set-GproxytManifestLanguages

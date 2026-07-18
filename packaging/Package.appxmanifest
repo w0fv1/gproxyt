@@ -18,7 +18,7 @@
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Resources>
-    <Resource Language="zh-cn" />
+    <Resource Language="en-US" />
   </Resources>
   <Dependencies>
     <TargetDeviceFamily

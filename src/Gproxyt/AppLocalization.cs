@@ -9,15 +9,16 @@ namespace Gproxyt;
 
 public sealed class AppLocalization : INotifyPropertyChanged
 {
-    internal static readonly CultureInfo[] SupportedCultures =
-    [
-        new("ar-SA"), new("de-DE"), new("en-US"), new("es-ES"), new("fr-FR"), new("hi-IN"),
-        new("id-ID"), new("it-IT"), new("ja-JP"), new("ko-KR"), new("nl-NL"), new("pl-PL"),
-        new("pt-BR"), new("ru-RU"), new("th-TH"), new("tr-TR"), new("uk-UA"), new("vi-VN"),
-        new("zh-CN"), new("zh-TW")
-    ];
-
     private static readonly Assembly Assembly = typeof(AppLocalization).Assembly;
+    private const string ResourcePrefix = "Gproxyt.Resources.Strings.";
+    private const string ResourceSuffix = ".json";
+    internal static readonly CultureInfo[] SupportedCultures = Assembly
+        .GetManifestResourceNames()
+        .Where(name => name.StartsWith(ResourcePrefix, StringComparison.Ordinal)
+            && name.EndsWith(ResourceSuffix, StringComparison.Ordinal))
+        .Select(name => new CultureInfo(name[ResourcePrefix.Length..^ResourceSuffix.Length]))
+        .OrderBy(culture => culture.Name, StringComparer.Ordinal)
+        .ToArray();
     private static readonly Dictionary<string, CultureInfo> CulturesByName = SupportedCultures
         .ToDictionary(culture => culture.Name, StringComparer.OrdinalIgnoreCase);
     private static readonly AppLocalization current = Load(CulturesByName["en-US"]);
@@ -96,5 +97,5 @@ public sealed class AppLocalization : INotifyPropertyChanged
     }
 
     private static string ResourceName(CultureInfo culture) =>
-        $"Gproxyt.Resources.Strings.{culture.Name}.json";
+        $"{ResourcePrefix}{culture.Name}{ResourceSuffix}";
 }

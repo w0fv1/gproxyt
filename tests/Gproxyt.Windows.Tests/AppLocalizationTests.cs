@@ -7,6 +7,21 @@ public sealed class AppLocalizationTests
     [Fact]
     public void Loads_every_embedded_translation_into_the_localization_provider()
     {
+        var embeddedCultures = typeof(AppLocalization).Assembly
+            .GetManifestResourceNames()
+            .Where(name => name.StartsWith("Gproxyt.Resources.Strings.", StringComparison.Ordinal)
+                && name.EndsWith(".json", StringComparison.Ordinal))
+            .Select(name => name["Gproxyt.Resources.Strings.".Length..^".json".Length])
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+        var supportedCultures = AppLocalization.SupportedCultures
+            .Select(culture => culture.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(20, supportedCultures.Length);
+        Assert.Equal(embeddedCultures, supportedCultures);
+
         var originalCulture = AppLocalization.Current.Culture;
         try
         {

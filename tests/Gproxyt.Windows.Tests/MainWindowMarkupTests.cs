@@ -54,7 +54,7 @@ public sealed class MainWindowMarkupTests
 
         Assert.Equal("18", (string?)headerBrandLogo.Attribute("Width"));
         Assert.Equal("18", (string?)headerBrandLogo.Attribute("Height"));
-        Assert.Equal("{DynamicResource TextFillColorPrimaryBrush}", (string?)headerBrandLogo.Attribute("Fill"));
+        Assert.Equal("#FF000000", (string?)headerBrandLogo.Attribute("Fill"));
         Assert.Equal("Assets/gproxyt.png", (string?)logoMask.Attribute("ImageSource"));
         Assert.Equal("GProxyT", (string?)headerBrandTitle.Attribute("Text"));
         Assert.Equal("GProxyT", (string?)contentTitle.Attribute("Text"));

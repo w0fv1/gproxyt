@@ -47,6 +47,21 @@
 
 首次提交包含四张中文桌面截图、完整信任能力说明、开机启动说明、隐私政策和认证测试步骤。商店产品文案维护在 `store-listing.zh-CN.md`，认证人员说明维护在 `certification-notes.zh-CN.md`。
 
+## 1.6.0 重新提交
+
+| 字段 | 值 |
+| --- | --- |
+| Partner Center Submission ID | `1152921505701431722` |
+| 更新日期 | 2026-07-18 |
+| 应用版本 | `1.6.0-stable` |
+| Store 程序包版本 | `1.6.0.0` |
+| 程序包 | `GProxyT_1.6.0.0_x64.msix` |
+| 架构 | x64 |
+| Store 一览语言 | 20 |
+| 程序包语言 | 20 |
+
+本次更新使用 GProxyT 自有品牌图标替换第三方产品图像，应用顶栏使用同一图标的纯黑剪影。Store 一览仅保留 `store-assets/zh-CN/01-main-light.png` 这一张当前版本桌面截图，并复用于 20 个语言页面。
+
 ## 收款与税务
 
 Microsoft Store China Seller ID 为 `95335590`。W-8BEN-E、企业银行转账资料、销售收益和广告收益的 CNY 分配已于 2026-07-17 提交，提交后状态为“挂起的 Microsoft 验证”。Partner Center 最长可能需要 48 小时同步验证结果。

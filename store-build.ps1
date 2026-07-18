@@ -16,6 +16,7 @@ $winapp = Resolve-WinAppCli -Path $WinAppPath
 $projectPath = Join-Path $projectRoot "src\Gproxyt\Gproxyt.csproj"
 $manifestTemplatePath = Join-Path $projectRoot "packaging\Package.appxmanifest"
 $logoPath = Join-Path $projectRoot "src\Gproxyt\Assets\gproxyt.png"
+$resourcesPath = Join-Path $projectRoot "src\Gproxyt\Resources"
 $semanticVersion = Read-GproxytProjectVersion -ProjectPath $projectPath
 $packageVersion = ConvertTo-GproxytStoreVersion -Version $semanticVersion
 $outputRoot = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
@@ -25,7 +26,6 @@ $outputRoot = if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
 }
 $stagingRoot = Join-Path $projectRoot "obj\Store\$([Guid]::NewGuid().ToString('N'))"
 $layoutPath = Join-Path $stagingRoot "layout"
-$darkThemeLogoPath = Join-Path $stagingRoot "gproxyt-dark-theme.png"
 $packagePath = Join-Path $outputRoot "GProxyT_$($packageVersion)_x64.msix"
 
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = "1"
@@ -55,8 +55,8 @@ try {
     $manifest = $manifest.Replace('Version="0.0.0.0"', "Version=`"$packageVersion`"")
     $manifestPath = Join-Path $layoutPath "Package.appxmanifest"
     Set-Content -LiteralPath $manifestPath -Value $manifest -Encoding UTF8 -NoNewline
-    New-GproxytDarkThemeLogo -SourcePath $logoPath -OutputPath $darkThemeLogoPath
-    & $winapp manifest update-assets $darkThemeLogoPath --light-image $logoPath --manifest $manifestPath
+    Set-GproxytManifestLanguages -ManifestPath $manifestPath -ResourcesPath $resourcesPath
+    & $winapp manifest update-assets $logoPath --light-image $logoPath --manifest $manifestPath
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE
     }

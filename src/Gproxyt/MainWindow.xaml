@@ -52,7 +52,7 @@
                 <Rectangle x:Name="HeaderBrandLogo"
                            Width="18"
                            Height="18"
-                           Fill="{DynamicResource TextFillColorPrimaryBrush}">
+                           Fill="#FF000000">
                     <Rectangle.OpacityMask>
                         <ImageBrush ImageSource="Assets/gproxyt.png"
                                     Stretch="Uniform" />
