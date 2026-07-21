@@ -14,7 +14,9 @@
 
 ## 描述
 
-GProxyT 是一款轻量的 Windows 桌面启动工具，为 Microsoft Store ChatGPT 桌面应用及其子进程单独配置 HTTP 代理。
+使用 GProxyT 需要先安装 Microsoft Store ChatGPT 桌面应用，并准备用户自行提供的 HTTP、HTTPS 或 SOCKS5 代理。GProxyT 不包含或销售代理服务。
+
+GProxyT 是一款轻量的 Windows 桌面启动工具，为 Microsoft Store ChatGPT 桌面应用及其子进程单独配置代理。
 
 它不会修改 Windows 系统代理，也不会更改其他应用的网络设置。你可以保存本地代理地址，并通过一个简洁的启动按钮重新打开 ChatGPT。
 
@@ -59,7 +61,7 @@ https://next.firco.cn/release/gproxyt
 
 ## 此版本中的新增功能
 
-- 全新 GProxyT 品牌界面和应用图标
-- Microsoft Store MSIX 安装与自动更新支持
-- 商店版原生开机启动支持
-- 改进 ChatGPT 程序包识别与启动稳定性
+- 在主页面显示当前代理地址
+- 代理不可用时显示具体地址和修复步骤
+- 区分代理连接失败与 ChatGPT 启动失败
+- 改进 Microsoft Store 认证测试说明

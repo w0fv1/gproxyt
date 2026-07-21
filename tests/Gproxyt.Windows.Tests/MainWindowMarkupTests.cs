@@ -33,6 +33,11 @@ public sealed class MainWindowMarkupTests
             .Single(element => (string?)element.Attribute("Text") == "{Binding [LaunchHint], Source={x:Static local:AppLocalization.Current}}");
 
         Assert.Equal("{DynamicResource TextFillColorSecondaryBrush}", (string?)hint.Attribute("Foreground"));
+
+        var proxyEndpoint = document
+            .Descendants(Presentation + "TextBlock")
+            .Single(element => (string?)element.Attribute(Xaml + "Name") == "ProxyEndpointText");
+        Assert.Equal("{DynamicResource TextFillColorSecondaryBrush}", (string?)proxyEndpoint.Attribute("Foreground"));
     }
 
     [Fact]

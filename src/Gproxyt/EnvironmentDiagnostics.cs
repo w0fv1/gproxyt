@@ -33,7 +33,7 @@ internal sealed class EnvironmentDiagnostics(IChatGptInstallationLocator install
     {
         if (!await CanConnectAsync(proxy))
         {
-            throw new InvalidOperationException($"无法连接代理 {proxy.Value}，请确认 Clash 正在运行。");
+            throw new ProxyUnavailableException(proxy);
         }
     }
 

@@ -22,6 +22,7 @@ public partial class MainWindow : FluentWindow
         InitializeComponent();
         FlowDirection = AppLocalization.Current.FlowDirection;
         Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
+        UpdateProxyEndpointText();
         SystemThemeWatcher.Watch(this);
     }
 
@@ -54,6 +55,7 @@ public partial class MainWindow : FluentWindow
                         AppLocalization.Current.Culture));
                     FlowDirection = AppLocalization.Current.FlowDirection;
                     Language = XmlLanguage.GetLanguage(AppLocalization.Current.Culture.IetfLanguageTag);
+                    UpdateProxyEndpointText();
                 }
                 catch (Exception)
                 {
@@ -83,6 +85,15 @@ public partial class MainWindow : FluentWindow
             LaunchProgressRing.Visibility = Visibility.Visible;
             await runtime.LaunchAsync(settings);
         }
+        catch (ProxyUnavailableException exception)
+        {
+            MessageBox.Show(
+                this,
+                string.Format(AppLocalization.Current["ProxyUnavailable"], exception.Proxy.Value),
+                "GProxyT",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception)
         {
             MessageBox.Show(this, AppLocalization.Current["LaunchFailed"], "GProxyT", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -94,4 +105,7 @@ public partial class MainWindow : FluentWindow
             LaunchButton.IsEnabled = true;
         }
     }
+
+    private void UpdateProxyEndpointText() =>
+        ProxyEndpointText.Text = string.Format(AppLocalization.Current["CurrentProxy"], settings.ProxyUrl);
 }

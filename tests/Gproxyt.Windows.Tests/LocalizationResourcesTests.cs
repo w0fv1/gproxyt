@@ -31,6 +31,10 @@ public sealed partial class LocalizationResourcesTests
             Assert.All(resources[culture].Values, value => Assert.False(string.IsNullOrWhiteSpace(value)));
             Assert.Equal("GProxyT", resources[culture]["AppName"]);
         }
+
+        Assert.DoesNotContain("your proxy", resources["en-US"]["LaunchFailed"], StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("{0}", resources["en-US"]["ProxyUnavailable"], StringComparison.Ordinal);
+        Assert.Contains("{0}", resources["en-US"]["CurrentProxy"], StringComparison.Ordinal);
     }
 
     [Theory]
